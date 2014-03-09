@@ -6,14 +6,14 @@ __email__ = "ericsbinaryworld at gmail dot com"
 
 import sys
 
-def snapshot:
+def snapshot():
   """"This runs every time the script is run (meant to be hourly). It will create a snapshot in the correct folder. 
   It will not move the snapshots to the backup drive. That will be another function."""
   print "Hey, I'm in snapshot!!"
   
-def Copy-snapshot:
+def Copysnapshot():
   """Copy the latest snapshot to the backup folder."""
   print "Hey, I'm copying the snapshot!"
   
 snapshot()
-copy-snapshots
+Copysnapshot()
