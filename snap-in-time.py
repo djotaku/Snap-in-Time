@@ -6,14 +6,29 @@ __email__ = "ericsbinaryworld at gmail dot com"
 
 import sys
 
-def snapshot():
+def getargs():
+  """Grab the commandline arguments and put them into a list.  Also give help if no arguments provided"""
+  try:
+        args = sys.argv[1:]
+        if args[0]== "debug":
+	  debug = True
+  except:
+	debug = False
+  return debug
+
+def snapshot(debugging):
   """"This runs every time the script is run (meant to be hourly). It will create a snapshot in the correct folder. 
   It will not move the snapshots to the backup drive. That will be another function."""
-  print "Hey, I'm in snapshot!!"
+  if(debugging):
+    print "Hey, I'm in snapshot!!"
   
-def Copysnapshot():
+def Copysnapshot(debugging):
   """Copy the latest snapshot to the backup folder."""
-  print "Hey, I'm copying the snapshot!"
+  if(debugging):
+    print "Hey, I'm copying the snapshot!"
   
-snapshot()
-Copysnapshot()
+debugit = getargs()
+if(debugit):
+  print "Debugging!"
+snapshot(debugit)
+Copysnapshot(debugit)
