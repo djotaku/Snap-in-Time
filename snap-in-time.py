@@ -171,6 +171,7 @@ def dailycleanup(debugging,folder,year,month,day):
       subprocess.Popen(command,env=curr_env,shell=True)     
     print "*********************************\n"
   else:
+    days = createpriordays(day)
     for n in range(0,len(days)):
       deletionfoldersPhase1.append(glob.glob("%s/%s-%s-%02d*" % (folder,year,month,days[n])))
     deletionfoldersPhase1 = filter(None,deletionfoldersPhase1) #gets rid of empty elements. Usually will only happen if computer isn't on at least once per day
