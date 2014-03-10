@@ -92,36 +92,42 @@ def dailycleanup(debugging,folder,year,month,day):
     print "New folder: %s" % folder
     for n in range(0,len(days)):
       deletionfoldersPhase1.append(glob.glob("%s/%s-%s-%02d*" % (folder,year,month,days[n])))
-    deletionfoldersPhase1 = filter(None,deletionfoldersPhase1) #gets rid of empty elements. Usually will only happen if computer isn't on at least once per day
-    print "deletionfoldersPhase1: %s" % deletionfoldersPhase1
-    for n in range(0,len(deletionfoldersPhase1)):
-      for i in range(0,len(deletionfoldersPhase1[n])):
-	if len(deletionfoldersPhase1[n]) == 1:
-	  print "too small"
-	else:
-	  print "folder is: %s" % deletionfoldersPhase1[n][i]
-	  entiretime = deletionfoldersPhase1[n][i][-4:]
-	  print "entire time is %s" % entiretime
-	  print "hour tens place is: %s" % entiretime[0]
-	  print "hour is: %s" % entiretime[1]
-	  print "whole hour is: %s" % entiretime[0:2]
-	  if (0 <= int(entiretime[0:2]) < 6):
-	    deletionfolders0000to0559.append(deletionfoldersPhase1[n][i])
-	  elif (6 <= int(entiretime[0:2]) < 12):
-	    deletionfolders0600to1159.append(deletionfoldersPhase1[n][i])
-	  elif (12 <= int(entiretime[0:2]) < 18):
-	    deletionfolders1200to1759.append(deletionfoldersPhase1[n][i])
-	  elif (18 <= int(entiretime[0:2]) < 24):
-	    deletionfolders1800to2359.append(deletionfoldersPhase1[n][i])
-    print "deletionfolders0000to0559: %s" % deletionfolders0000to0559
-    print "deletionfolders0600to1159: %s" % deletionfolders0600to1159
-    print "deletionfolders1200to1759: %s" % deletionfolders1200to1759
-    print "deletionfolders1800to2359: %s" % deletionfolders1800to2359
+      deletionfoldersPhase1 = filter(None,deletionfoldersPhase1) #gets rid of empty elements. Usually will only happen if computer isn't on at least once per day
+      print "Day %02d: deletionfoldersPhase1: %s\n" % (days[n],deletionfoldersPhase1)
+      for n in range(0,len(deletionfoldersPhase1)):
+	for i in range(0,len(deletionfoldersPhase1[n])):
+	  if len(deletionfoldersPhase1[n]) == 1:
+	    print "too small"
+	  else:
+	    print "folder is: %s" % deletionfoldersPhase1[n][i]
+	    entiretime = deletionfoldersPhase1[n][i][-4:]
+	    print "entire time is %s" % entiretime
+	    print "whole hour is: %s" % entiretime[0:2]
+	    if (0 <= int(entiretime[0:2]) < 6):
+	      deletionfolders0000to0559.append(deletionfoldersPhase1[n][i])
+	    elif (6 <= int(entiretime[0:2]) < 12):
+	      deletionfolders0600to1159.append(deletionfoldersPhase1[n][i])
+	    elif (12 <= int(entiretime[0:2]) < 18):
+	      deletionfolders1200to1759.append(deletionfoldersPhase1[n][i])
+	    elif (18 <= int(entiretime[0:2]) < 24):
+	      deletionfolders1800to2359.append(deletionfoldersPhase1[n][i])
+      print "deletionfolders0000to0559: %s" % deletionfolders0000to0559
+      print "deletionfolders0600to1159: %s" % deletionfolders0600to1159
+      print "deletionfolders1200to1759: %s" % deletionfolders1200to1759
+      print "deletionfolders1800to2359: %s" % deletionfolders1800to2359
     
-    folderdeletion(deletionfolders0000to0559)
-    folderdeletion(deletionfolders0600to1159)
-    folderdeletion(deletionfolders1200to1759)
-    folderdeletion(deletionfolders1800to2359)
+      folderdeletion(deletionfolders0000to0559)
+      folderdeletion(deletionfolders0600to1159)
+      folderdeletion(deletionfolders1200to1759)
+      folderdeletion(deletionfolders1800to2359)
+      
+      #start over for next day
+      deletionfoldersPhase1 = [] 
+      deletionfolders0000to0559 = []
+      deletionfolders0600to1159 = []
+      deletionfolders1200to1759 = []
+      deletionfolders1800to2359 = []
+      
     print "*********************************\n"
   else:
     days = createpriordays(day)
