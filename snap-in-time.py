@@ -142,6 +142,30 @@ def dailycleanup(debugging,folder,year,month,day):
       curr_env = os.environ.copy()
       #print curr_env
       subprocess.Popen(command,env=curr_env,shell=True)
+    
+    for n in deletionfolders0600to1159:
+      command = "rmdir $HOME/bin/python/Snap-in-Time/Snap-in-Time/%s" % n
+      print command
+      #subprocess.call(command,shell=True)
+      curr_env = os.environ.copy()
+      #print curr_env
+      subprocess.Popen(command,env=curr_env,shell=True)
+ 
+    for n in deletionfolders1200to1759:
+      command = "rmdir $HOME/bin/python/Snap-in-Time/Snap-in-Time/%s" % n
+      print command
+      #subprocess.call(command,shell=True)
+      curr_env = os.environ.copy()
+      #print curr_env
+      subprocess.Popen(command,env=curr_env,shell=True)
+     
+    for n in deletionfolders1800to2359:
+      command = "rmdir $HOME/bin/python/Snap-in-Time/Snap-in-Time/%s" % n
+      print command
+      #subprocess.call(command,shell=True)
+      curr_env = os.environ.copy()
+      #print curr_env
+      subprocess.Popen(command,env=curr_env,shell=True)     
     print "*********************************\n"
   else:
     print "will do stuff soon"
