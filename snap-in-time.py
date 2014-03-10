@@ -69,6 +69,20 @@ def folderdeletion(folderlist):
     print command
     curr_env = os.environ.copy()
     subprocess.Popen(command,env=curr_env,shell=True)
+    
+def btrfsdeletion(folderlist):
+  tokeep = "0000"
+  for n in range(0,len(folderlist)):
+    if int(folderlist[n][-3]) > int(tokeep[-3]) :
+	tokeep = folderlist[n]
+  folderlist = [v for v in folderlist if v not in tokeep]
+  
+  #time to remove the btrfs
+  for n in folderlist:
+    command = "sudo btrfs subvolume delete %s" % n
+    print command
+    subprocess.call(command,shell=True)
+    
 
 def dailycleanup(debugging,folder,year,month,day):
   """Keep 2 days worth of backups. After that, only keep 4 backups per day - ideally separated by six hours.
@@ -133,67 +147,33 @@ def dailycleanup(debugging,folder,year,month,day):
     days = createpriordays(day)
     for n in range(0,len(days)):
       deletionfoldersPhase1.append(glob.glob("%s/%s-%s-%02d*" % (folder,year,month,days[n])))
-    deletionfoldersPhase1 = filter(None,deletionfoldersPhase1) #gets rid of empty elements. Usually will only happen if computer isn't on at least once per day
-    for n in range(0,len(deletionfoldersPhase1)):
-      for i in range(0,len(deletionfoldersPhase1[n])):
-	if len(deletionfoldersPhase1[n]) == 1:
-	  print "too small"
-	else:
-	  entiretime = deletionfoldersPhase1[n][i][-4:]
-	  if (0 <= int(entiretime[0:2]) < 6):
-	    deletionfolders0000to0559.append(deletionfoldersPhase1[n][i])
-	  elif (6 <= int(entiretime[0:2]) < 12):
-	    deletionfolders0600to1159.append(deletionfoldersPhase1[n][i])
-	  elif (12 <= int(entiretime[0:2]) < 18):
-	    deletionfolders1200to1759.append(deletionfoldersPhase1[n][i])
-	  elif (18 <= int(entiretime[0:2]) < 24):
-	    deletionfolders1800to2359.append(deletionfoldersPhase1[n][i])
-    tokeep = "0000"
-    for n in range(0,len(deletionfolders0000to0559)):
-      if int(deletionfolders0000to0559[n][-3]) > int(tokeep[-3]) :
-	tokeep = deletionfolders0000to0559[n]
-    deletionfolders0000to0559 = [v for v in deletionfolders0000to0559 if v not in tokeep]
-    
-    tokeep = "0000"
-    for n in range(0,len(deletionfolders0600to1159)):
-      if int(deletionfolders0600to1159[n][-4:]) > int(tokeep[-4:]) :
-	tokeep = deletionfolders0600to1159[n]
-    deletionfolders0600to1159 = [v for v in deletionfolders0600to1159 if v not in tokeep]
-    
-    tokeep = "0000"
-    for n in range(0,len(deletionfolders1200to1759)):
-      if int(deletionfolders1200to1759[n][-4:]) > int(tokeep[-4:]) :
-	tokeep = deletionfolders1200to1759[n]
-    deletionfolders1200to1759 = [v for v in deletionfolders1200to1759 if v not in tokeep]
-    
-    tokeep = "0000"
-    for n in range(0,len(deletionfolders1800to2359)):
-      if int(deletionfolders1800to2359[n][-4:]) > int(tokeep[-4:]) :
-	tokeep = deletionfolders1800to2359[n]
-    deletionfolders1800to2359 = [v for v in deletionfolders1800to2359 if v not in tokeep]
-    
-    #time to remove the folders - needs to be fixed before used in production
-    for n in deletionfolders0000to0559:
-      command = "sudo btrfs subvolume delete %s" % n
-      print command
-      subprocess.call(command,shell=True)
-    
-    for n in deletionfolders0600to1159:
-      command = "sudo btrfs subvolume delete %s" % n
-      print command
-      subprocess.call(command,shell=True)
-
- 
-    for n in deletionfolders1200to1759:
-      command = "sudo btrfs subvolume delete %s" % n
-      print command
-      subprocess.call(command,shell=True)
-
-     
-    for n in deletionfolders1800to2359:
-      command = "sudo btrfs subvolume delete %s" % n
-      print command
-      subprocess.call(command,shell=True)
+      deletionfoldersPhase1 = filter(None,deletionfoldersPhase1) #gets rid of empty elements. Usually will only happen if computer isn't on at least once per day
+      for n in range(0,len(deletionfoldersPhase1)):
+	for i in range(0,len(deletionfoldersPhase1[n])):
+	  if len(deletionfoldersPhase1[n]) == 1:
+	    print "too small"
+	  else:
+	    entiretime = deletionfoldersPhase1[n][i][-4:]
+	    if (0 <= int(entiretime[0:2]) < 6):
+	      deletionfolders0000to0559.append(deletionfoldersPhase1[n][i])
+	    elif (6 <= int(entiretime[0:2]) < 12):
+	      deletionfolders0600to1159.append(deletionfoldersPhase1[n][i])
+	    elif (12 <= int(entiretime[0:2]) < 18):
+	      deletionfolders1200to1759.append(deletionfoldersPhase1[n][i])
+	    elif (18 <= int(entiretime[0:2]) < 24):
+	      deletionfolders1800to2359.append(deletionfoldersPhase1[n][i])
+      
+      btrfsdeletion(deletionfolders0000to0559)
+      btrfsdeletion(deletionfolders0600to1159)
+      btrfsdeletion(deletionfolders1200to1759)
+      btrfsdeletion(deletionfolders1800to2359)
+      
+      #start over for next day
+      deletionfoldersPhase1 = [] 
+      deletionfolders0000to0559 = []
+      deletionfolders0600to1159 = []
+      deletionfolders1200to1759 = []
+      deletionfolders1800to2359 = []
 
 def createpriordaysforweekly(thismonth,today):
   """Create numbers for searching for day"""
