@@ -74,7 +74,7 @@ def folderdeletion(folderlist):
 def btrfsdeletion(folderlist):
   tokeep = "0000"
   for n in range(0,len(folderlist)):
-    if int(folderlist[n][-3]) > int(tokeep[-3]) :
+    if (int(folderlist[n][-4])*10 + int(folderlist[n][-3])) > (int(tokeep[-4])*10 + int(tokeep[-3])) :
 	tokeep = folderlist[n]
   folderlist = [v for v in folderlist if v not in tokeep]
   
