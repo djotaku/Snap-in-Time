@@ -86,17 +86,13 @@ def dailycleanup(debugging,folder,year,month,day):
 	  print "hour tens place is: %s" % entiretime[0]
 	  print "hour is: %s" % entiretime[1]
 	  print "whole hour is: %s" % entiretime[0:2]
-	  if int(deletionfoldersPhase1[n][i][-4]) == 0 and (0 <= int(deletionfoldersPhase1[n][i][-3]) < 6):
+	  if (0 <= int(entiretime[0:2]) < 6):
 	    deletionfolders0000to0559.append(deletionfoldersPhase1[n][i])
-	  elif int(deletionfoldersPhase1[n][i][-4]) == 0 and (6 <= int(deletionfoldersPhase1[n][i][-3]) < 10):
+	  elif (6 <= int(entiretime[0:2]) < 12):
 	    deletionfolders0600to1159.append(deletionfoldersPhase1[n][i])
-	  elif int(deletionfoldersPhase1[n][i][-4]) == 1 and (0 <= int(deletionfoldersPhase1[n][i][-3]) < 2):
-	    deletionfolders0600to1159.append(deletionfoldersPhase1[n][i])
-	  elif int(deletionfoldersPhase1[n][i][-4]) == 1 and (2 <= int(deletionfoldersPhase1[n][i][-3]) < 8):
+	  elif (12 <= int(entiretime[0:2]) < 18):
 	    deletionfolders1200to1759.append(deletionfoldersPhase1[n][i])
-	  elif int(deletionfoldersPhase1[n][i][-4]) == 1 and (8 <= int(deletionfoldersPhase1[n][i][-3]) < 10):
-	    deletionfolders1800to2359.append(deletionfoldersPhase1[n][i])
-	  elif int(deletionfoldersPhase1[n][i][-4]) == 2 and (0 <= int(deletionfoldersPhase1[n][i][-3]) < 4):
+	  elif (18 <= int(entiretime[0:2]) < 24):
 	    deletionfolders1800to2359.append(deletionfoldersPhase1[n][i])
     print "deletionfolders0000to0559: %s" % deletionfolders0000to0559
     print "deletionfolders0600to1159: %s" % deletionfolders0600to1159
