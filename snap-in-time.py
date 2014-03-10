@@ -217,8 +217,7 @@ def dailycleanup(debugging,folder,year,month,day):
     for n in deletionfolders0000to0559:
       command = "sudo btrfs subvolume delete %s" % n
       print command
-      #chickening out on calling it the first time I test on the test VM
-      #subprocess.call(command,shell=True)
+      subprocess.call(command,shell=True)
     
     for n in deletionfolders0600to1159:
       command = "sudo btrfs subvolume delete %s" % n
@@ -229,13 +228,13 @@ def dailycleanup(debugging,folder,year,month,day):
     for n in deletionfolders1200to1759:
       command = "sudo btrfs subvolume delete %s" % n
       print command
-      #subprocess.call(command,shell=True)
+      subprocess.call(command,shell=True)
 
      
     for n in deletionfolders1800to2359:
       command = "sudo btrfs subvolume delete %s" % n
       print command
-      #subprocess.call(command,shell=True)
+      subprocess.call(command,shell=True)
 
 
 #Setting up variables
