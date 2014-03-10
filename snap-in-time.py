@@ -24,7 +24,6 @@ def snapshot(debugging,snapshotfolder):
     print "btrfs snapshot will go in: %s" % snapshotfolder
   else:
     command = "sudo btrfs sub snapshot -r /home %s" % snapshotfolder
-    print command
     subprocess.call(command, shell=True) #don't need sudo if run as root
     
   
@@ -42,13 +41,27 @@ def getdate():
   Minute = time.strftime("%M")
   return (Year,Month,Day,Hour,Minute)
 
+def dailycleanup(debugging,folder,month,day):
+  """Keep 2 days worth of backups. After that, only keep 4 backups per day - ideally split by six hours.
+  Here's where things get tough. This is super easy to do if the computer's on 24 hours a day. But what if it's sporadically turned off?
+  Then how do we determine which ones to get rid of?"""
+  if(debugging):
+    print "Hey, I'm in dailycleanup!!"
+    print "folder: %s" % folder
+    print "month: %s" % month
+    print "day: %s" % day
+  else:
+    print "will do stuff soon"
+
 #Setting up variables
 #dates
 (Year,Month,Day,Hour,Minute) = getdate()
-localfolder = "/home/.snapshots/%s-%s-%s-%s-%s" % (Year, Month, Day, Hour, Minute)
+localfolderbase = "/home/.snapshots"
+localfolder = "%s/%s-%s-%s-%s%s" % (localfolderbase,Year, Month, Day, Hour, Minute)
 debugit = getargs()
 if(debugit):
   print "Debugging!"
   print localfolder
 snapshot(debugit,localfolder)
 Copysnapshot(debugit)
+dailycleanup(debugit,localfolderbase,Month,Day)
