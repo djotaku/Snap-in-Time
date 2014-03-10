@@ -24,7 +24,8 @@ def snapshot(debugging,snapshotfolder):
     print "btrfs snapshot will go in: %s" % snapshotfolder
   else:
     command = "sudo btrfs sub snapshot -r /home /home/.snapshots/%s" % snapshotfolder
-    subprocess.call(command) #don't need sudo if run as root
+    print command
+    subprocess.call(command, shell=True) #don't need sudo if run as root
     
   
 def Copysnapshot(debugging):
