@@ -4,7 +4,7 @@ __license__ = "GNU GPL v3.0"
 __copyright__ = "(c) 2014 Eric Mesa"
 __email__ = "ericsbinaryworld at gmail dot com"
 
-import sys, time
+import sys, time,subprocess
 
 def getargs():
   """Grab the commandline arguments and put them into a list.  Also give help if no arguments provided"""
@@ -23,7 +23,7 @@ def snapshot(debugging,snapshotfolder):
     print "Hey, I'm in snapshot!!"
     print "btrfs snapshot will go in: %s" % snapshotfolder
   else:
-    print "nothing now"
+    subprocess.call("sudo btrfs sub snapshot -r /home /home/.snapshots/%s" % snapshotfolder)
     
   
 def Copysnapshot(debugging):
