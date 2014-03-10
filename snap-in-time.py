@@ -45,16 +45,31 @@ def getdate():
   Minute = time.strftime("%M")
   return (Year,Month,Day,Hour,Minute)
 
-def dailycleanup(debugging,folder,month,day):
+def createpriordays(today):
+  """Create numbers for searching for day"""
+  days = []
+  for n in range(1,int(today)-1):
+    print n
+    days.append(n)
+  return days
+
+def dailycleanup(debugging,folder,year,month,day):
   """Keep 2 days worth of backups. After that, only keep 4 backups per day - ideally split by six hours.
   Here's where things get tough. This is super easy to do if the computer's on 24 hours a day. But what if it's sporadically turned off?
   Then how do we determine which ones to get rid of?"""
+  deletionfoldersPhase1 = []
   if(debugging):
     print "*********************************"
     print "Hey, I'm in dailycleanup!!"
     print "folder: %s" % folder
+    print "year: %s" % year
     print "month: %s" % month
     print "day: %s" % day
+    days = createpriordays(day)
+    print "Days: %s" % days
+    for n in range(0,len(days)):
+      deletionfoldersPhase1.append(glob.glob("test-folder-deletion/%s-%s-%02d*" % (year,month,days[n])))
+    print "deletionfoldersPhase1: %s" % deletionfoldersPhase1
     print "*********************************\n"
   else:
     print "will do stuff soon"
@@ -71,4 +86,4 @@ if(debugit):
   print "\n"
 snapshot(debugit,localfolder)
 Copysnapshot(debugit)
-dailycleanup(debugit,localfolderbase,Month,Day)
+dailycleanup(debugit,localfolderbase,Year,Month,Day)
