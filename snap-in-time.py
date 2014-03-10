@@ -1,10 +1,10 @@
 __author__ = "Eric Mesa"
-__version__ = "v0.1"
+__version__ = "v0.2"
 __license__ = "GNU GPL v3.0"
 __copyright__ = "(c) 2014 Eric Mesa"
 __email__ = "ericsbinaryworld at gmail dot com"
 
-import sys, time,subprocess
+import sys, time,subprocess,glob
 
 def getargs():
   """Grab the commandline arguments and put them into a list.  Also give help if no arguments provided"""
