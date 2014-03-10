@@ -54,7 +54,8 @@ def createpriordays(today):
   return days
 
 def dailycleanup(debugging,folder,year,month,day):
-  """Keep 2 days worth of backups. After that, only keep 4 backups per day - ideally separated by six hours."""
+  """Keep 2 days worth of backups. After that, only keep 4 backups per day - ideally separated by six hours.
+  Currently will not properly handle things when it's the 1st or 2nd of the month."""
   deletionfoldersPhase1 = []
   deletionfolders0000to0559 = []
   deletionfolders0600to1159 = []
@@ -235,6 +236,8 @@ def dailycleanup(debugging,folder,year,month,day):
       subprocess.call(command,shell=True)
 
 def weeklycleanup(debugging,folder,year,month,day):
+  """Leave One week of backups with the previous frequency: 4 backups per day.
+  For weeks prior to this one, eliminite 3/4 of those, leaving one per day."""
   if(debugging):
     print "*********************************"
     print "Hey, I'm in weeklycleanup!!"
