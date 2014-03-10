@@ -53,6 +53,23 @@ def createpriordays(today):
     days.append(n)
   return days
 
+def folderdeletion(folderlist):
+  tokeep = "0000"
+  for n in range(0,len(folderlist)):
+    if int(folderlist[n][-3]) > int(tokeep[-3]) :
+	tokeep = folderlist[n]
+  print "folderlist before filter: %s\n" % folderlist
+  print "to keep is: %s\n" % tokeep
+  folderlist = [v for v in folderlist if v not in tokeep]
+  print "folderlist after filter: %s\n" % folderlist
+  
+  #time to remove the folders
+  for n in folderlist:
+    command = "rmdir $HOME/bin/python/Snap-in-Time/Snap-in-Time/%s" % n
+    print command
+    curr_env = os.environ.copy()
+    subprocess.Popen(command,env=curr_env,shell=True)
+
 def dailycleanup(debugging,folder,year,month,day):
   """Keep 2 days worth of backups. After that, only keep 4 backups per day - ideally separated by six hours.
   Currently will not properly handle things when it's the 1st or 2nd of the month."""
@@ -100,74 +117,11 @@ def dailycleanup(debugging,folder,year,month,day):
     print "deletionfolders0600to1159: %s" % deletionfolders0600to1159
     print "deletionfolders1200to1759: %s" % deletionfolders1200to1759
     print "deletionfolders1800to2359: %s" % deletionfolders1800to2359
-    tokeep = "0000"
-    for n in range(0,len(deletionfolders0000to0559)):
-      if int(deletionfolders0000to0559[n][-3]) > int(tokeep[-3]) :
-	tokeep = deletionfolders0000to0559[n]
-    print "deletionfolders0000to0559 before filter: %s\n" % deletionfolders0000to0559
-    print "to keep is: %s\n" % tokeep
-    deletionfolders0000to0559 = [v for v in deletionfolders0000to0559 if v not in tokeep]
-    print "deletionfolders0000to0559 after filter: %s\n" % deletionfolders0000to0559
     
-    tokeep = "0000"
-    for n in range(0,len(deletionfolders0600to1159)):
-      if int(deletionfolders0600to1159[n][-4:]) > int(tokeep[-4:]) :
-	tokeep = deletionfolders0600to1159[n]
-    print "deletionfolders0600to1159 before filter: %s\n" % deletionfolders0600to1159
-    print "to keep is: %s\n" % tokeep
-    deletionfolders0600to1159 = [v for v in deletionfolders0600to1159 if v not in tokeep]
-    print "deletionfolders0600to1159 after filter: %s\n" % deletionfolders0600to1159
-    
-    tokeep = "0000"
-    for n in range(0,len(deletionfolders1200to1759)):
-      if int(deletionfolders1200to1759[n][-4:]) > int(tokeep[-4:]) :
-	tokeep = deletionfolders1200to1759[n]
-    print "deletionfolders1200to1759 before filter: %s\n" % deletionfolders1200to1759
-    print "to keep is: %s\n" % tokeep
-    deletionfolders1200to1759 = [v for v in deletionfolders1200to1759 if v not in tokeep]
-    print "deletionfolders1200to1759 after filter: %s\n" % deletionfolders1200to1759
-    
-    tokeep = "0000"
-    for n in range(0,len(deletionfolders1800to2359)):
-      if int(deletionfolders1800to2359[n][-4:]) > int(tokeep[-4:]) :
-	tokeep = deletionfolders1800to2359[n]
-    print "deletionfolders1800to2359 before filter: %s\n" % deletionfolders1800to2359
-    print "to keep is: %s\n" % tokeep
-    deletionfolders1800to2359 = [v for v in deletionfolders1800to2359 if v not in tokeep]
-    print "deletionfolders1800to2359 after filter: %s\n" % deletionfolders1800to2359
-    
-    #time to remove the folders
-    for n in deletionfolders0000to0559:
-      command = "rmdir $HOME/bin/python/Snap-in-Time/Snap-in-Time/%s" % n
-      print command
-      #subprocess.call(command,shell=True)
-      curr_env = os.environ.copy()
-      #print curr_env
-      subprocess.Popen(command,env=curr_env,shell=True)
-    
-    for n in deletionfolders0600to1159:
-      command = "rmdir $HOME/bin/python/Snap-in-Time/Snap-in-Time/%s" % n
-      print command
-      #subprocess.call(command,shell=True)
-      curr_env = os.environ.copy()
-      #print curr_env
-      subprocess.Popen(command,env=curr_env,shell=True)
- 
-    for n in deletionfolders1200to1759:
-      command = "rmdir $HOME/bin/python/Snap-in-Time/Snap-in-Time/%s" % n
-      print command
-      #subprocess.call(command,shell=True)
-      curr_env = os.environ.copy()
-      #print curr_env
-      subprocess.Popen(command,env=curr_env,shell=True)
-     
-    for n in deletionfolders1800to2359:
-      command = "rmdir $HOME/bin/python/Snap-in-Time/Snap-in-Time/%s" % n
-      print command
-      #subprocess.call(command,shell=True)
-      curr_env = os.environ.copy()
-      #print curr_env
-      subprocess.Popen(command,env=curr_env,shell=True)     
+    folderdeletion(deletionfolders0000to0559)
+    folderdeletion(deletionfolders0600to1159)
+    folderdeletion(deletionfolders1200to1759)
+    folderdeletion(deletionfolders1800to2359)
     print "*********************************\n"
   else:
     days = createpriordays(day)
