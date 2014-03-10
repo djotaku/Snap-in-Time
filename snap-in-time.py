@@ -54,9 +54,7 @@ def createpriordays(today):
   return days
 
 def dailycleanup(debugging,folder,year,month,day):
-  """Keep 2 days worth of backups. After that, only keep 4 backups per day - ideally split by six hours.
-  Here's where things get tough. This is super easy to do if the computer's on 24 hours a day. But what if it's sporadically turned off?
-  Then how do we determine which ones to get rid of?"""
+  """Keep 2 days worth of backups. After that, only keep 4 backups per day - ideally separated by six hours."""
   deletionfoldersPhase1 = []
   deletionfolders0000to0559 = []
   deletionfolders0600to1159 = []
@@ -236,6 +234,18 @@ def dailycleanup(debugging,folder,year,month,day):
       print command
       subprocess.call(command,shell=True)
 
+def weeklycleanup(debugging,folder,year,month,day):
+  if(debugging):
+    print "*********************************"
+    print "Hey, I'm in weeklycleanup!!"
+    print "folder: %s" % folder
+    print "year: %s" % year
+    print "month: %s" % month
+    print "day: %s" % day
+    print "*********************************\n"
+  else:
+    print "something soon"
+
 
 #Setting up variables
 #dates
@@ -250,3 +260,4 @@ if(debugit):
 snapshot(debugit,localfolder)
 Copysnapshot(debugit)
 dailycleanup(debugit,localfolderbase,Year,Month,Day)
+weeklycleanup(debugit,localfolderbase,Year,Month,Day)
