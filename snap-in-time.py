@@ -75,6 +75,33 @@ def dailycleanup(debugging,folder,year,month,day):
       deletionfoldersPhase1.append(glob.glob("test-folder-deletion/%s-%s-%02d*" % (year,month,days[n])))
     deletionfoldersPhase1 = filter(None,deletionfoldersPhase1) #gets rid of empty elements. Usually will only happen if computer isn't on at least once per day
     print "deletionfoldersPhase1: %s" % deletionfoldersPhase1
+    for n in range(0,len(deletionfoldersPhase1)):
+      for i in range(0,len(deletionfoldersPhase1[n])):
+	if len(deletionfoldersPhase1[n]) == 1:
+	  print "too small"
+	else:
+	  print "folder is: %s" % deletionfoldersPhase1[n][i]
+	  entiretime = deletionfoldersPhase1[n][i][-4:]
+	  print "entire time is %s" % entiretime
+	  print "hour tens place is: %s" % entiretime[0]
+	  print "hour is: %s" % entiretime[1]
+	  print "whole hour is: %s" % entiretime[0:2]
+	  if int(deletionfoldersPhase1[n][i][-4]) == 0 and (0 <= int(deletionfoldersPhase1[n][i][-3]) < 6):
+	    deletionfolders0000to0559.append(deletionfoldersPhase1[n][i])
+	  elif int(deletionfoldersPhase1[n][i][-4]) == 0 and (6 <= int(deletionfoldersPhase1[n][i][-3]) < 10):
+	    deletionfolders0600to1159.append(deletionfoldersPhase1[n][i])
+	  elif int(deletionfoldersPhase1[n][i][-4]) == 1 and (0 <= int(deletionfoldersPhase1[n][i][-3]) < 2):
+	    deletionfolders0600to1159.append(deletionfoldersPhase1[n][i])
+	  elif int(deletionfoldersPhase1[n][i][-4]) == 1 and (2 <= int(deletionfoldersPhase1[n][i][-3]) < 8):
+	    deletionfolders1200to1759.append(deletionfoldersPhase1[n][i])
+	  elif int(deletionfoldersPhase1[n][i][-4]) == 1 and (8 <= int(deletionfoldersPhase1[n][i][-3]) < 10):
+	    deletionfolders1800to2359.append(deletionfoldersPhase1[n][i])
+	  elif int(deletionfoldersPhase1[n][i][-4]) == 2 and (0 <= int(deletionfoldersPhase1[n][i][-3]) < 4):
+	    deletionfolders1800to2359.append(deletionfoldersPhase1[n][i])
+    print "deletionfolders0000to0559: %s" % deletionfolders0000to0559
+    print "deletionfolders0600to1159: %s" % deletionfolders0600to1159
+    print "deletionfolders1200to1759: %s" % deletionfolders1200to1759
+    print "deletionfolders1800to2359: %s" % deletionfolders1800to2359
     print "*********************************\n"
   else:
     print "will do stuff soon"
