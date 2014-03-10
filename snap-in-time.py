@@ -4,7 +4,7 @@ __license__ = "GNU GPL v3.0"
 __copyright__ = "(c) 2014 Eric Mesa"
 __email__ = "ericsbinaryworld at gmail dot com"
 
-import sys, time,subprocess,glob
+import sys,time,subprocess,glob,os
 
 def getargs():
   """Grab the commandline arguments and put them into a list.  Also give help if no arguments provided"""
@@ -133,6 +133,15 @@ def dailycleanup(debugging,folder,year,month,day):
     print "to keep is: %s" % tokeep
     deletionfolders1800to2359 = [v for v in deletionfolders1800to2359 if v not in tokeep]
     print "deletionfolders1800to2359 after filter: %s" % deletionfolders1800to2359
+    
+    #time to remove the folders
+    for n in deletionfolders0000to0559:
+      command = "rmdir $HOME/bin/python/Snap-in-Time/Snap-in-Time/%s" % n
+      print command
+      #subprocess.call(command,shell=True)
+      curr_env = os.environ.copy()
+      #print curr_env
+      subprocess.Popen(command,env=curr_env,shell=True)
     print "*********************************\n"
   else:
     print "will do stuff soon"
