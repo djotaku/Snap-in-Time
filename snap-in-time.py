@@ -20,8 +20,10 @@ def snapshot(debugging,snapshotfolder):
   """"This runs every time the script is run (meant to be hourly). It will create a snapshot in the correct folder. 
   It will not move the snapshots to the backup drive. That will be another function."""
   if(debugging):
+    print "*********************************"
     print "Hey, I'm in snapshot!!"
     print "btrfs snapshot will go in: %s" % snapshotfolder
+    print "*********************************\n"
   else:
     command = "sudo btrfs sub snapshot -r /home %s" % snapshotfolder
     subprocess.call(command, shell=True) #don't need sudo if run as root
@@ -30,7 +32,9 @@ def snapshot(debugging,snapshotfolder):
 def Copysnapshot(debugging):
   """Copy the latest snapshot to the backup folder."""
   if(debugging):
+    print "*********************************"
     print "Hey, I'm copying the snapshot!"
+    print "*********************************\n"
 
 def getdate():
   """Generates the values for the date variables"""
@@ -46,10 +50,12 @@ def dailycleanup(debugging,folder,month,day):
   Here's where things get tough. This is super easy to do if the computer's on 24 hours a day. But what if it's sporadically turned off?
   Then how do we determine which ones to get rid of?"""
   if(debugging):
+    print "*********************************"
     print "Hey, I'm in dailycleanup!!"
     print "folder: %s" % folder
     print "month: %s" % month
     print "day: %s" % day
+    print "*********************************\n"
   else:
     print "will do stuff soon"
 
@@ -61,7 +67,8 @@ localfolder = "%s/%s-%s-%s-%s%s" % (localfolderbase,Year, Month, Day, Hour, Minu
 debugit = getargs()
 if(debugit):
   print "Debugging!"
-  print localfolder
+  print "localfolder: %s" % localfolder
+  print "\n"
 snapshot(debugit,localfolder)
 Copysnapshot(debugit)
 dailycleanup(debugit,localfolderbase,Month,Day)
