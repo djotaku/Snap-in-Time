@@ -104,37 +104,37 @@ def dailycleanup(debugging,folder,year,month,day):
     for n in range(0,len(deletionfolders0000to0559)):
       if int(deletionfolders0000to0559[n][-3]) > int(tokeep[-3]) :
 	tokeep = deletionfolders0000to0559[n]
-    print "deletionfolders0000to0559 before filter: %s" % deletionfolders0000to0559
-    print "to keep is: %s" % tokeep
+    print "deletionfolders0000to0559 before filter: %s\n" % deletionfolders0000to0559
+    print "to keep is: %s\n" % tokeep
     deletionfolders0000to0559 = [v for v in deletionfolders0000to0559 if v not in tokeep]
-    print "deletionfolders0000to0559 after filter: %s" % deletionfolders0000to0559
+    print "deletionfolders0000to0559 after filter: %s\n" % deletionfolders0000to0559
     
     tokeep = "0000"
     for n in range(0,len(deletionfolders0600to1159)):
       if int(deletionfolders0600to1159[n][-4:]) > int(tokeep[-4:]) :
 	tokeep = deletionfolders0600to1159[n]
-    print "deletionfolders0600to1159 before filter: %s" % deletionfolders0600to1159
-    print "to keep is: %s" % tokeep
+    print "deletionfolders0600to1159 before filter: %s\n" % deletionfolders0600to1159
+    print "to keep is: %s\n" % tokeep
     deletionfolders0600to1159 = [v for v in deletionfolders0600to1159 if v not in tokeep]
-    print "deletionfolders0600to1159 after filter: %s" % deletionfolders0600to1159
+    print "deletionfolders0600to1159 after filter: %s\n" % deletionfolders0600to1159
     
     tokeep = "0000"
     for n in range(0,len(deletionfolders1200to1759)):
       if int(deletionfolders1200to1759[n][-4:]) > int(tokeep[-4:]) :
 	tokeep = deletionfolders1200to1759[n]
-    print "deletionfolders1200to1759 before filter: %s" % deletionfolders1200to1759
-    print "to keep is: %s" % tokeep
+    print "deletionfolders1200to1759 before filter: %s\n" % deletionfolders1200to1759
+    print "to keep is: %s\n" % tokeep
     deletionfolders1200to1759 = [v for v in deletionfolders1200to1759 if v not in tokeep]
-    print "deletionfolders1200to1759 after filter: %s" % deletionfolders1200to1759
+    print "deletionfolders1200to1759 after filter: %s\n" % deletionfolders1200to1759
     
     tokeep = "0000"
     for n in range(0,len(deletionfolders1800to2359)):
       if int(deletionfolders1800to2359[n][-4:]) > int(tokeep[-4:]) :
 	tokeep = deletionfolders1800to2359[n]
-    print "deletionfolders1800to2359 before filter: %s" % deletionfolders1800to2359
-    print "to keep is: %s" % tokeep
+    print "deletionfolders1800to2359 before filter: %s\n" % deletionfolders1800to2359
+    print "to keep is: %s\n" % tokeep
     deletionfolders1800to2359 = [v for v in deletionfolders1800to2359 if v not in tokeep]
-    print "deletionfolders1800to2359 after filter: %s" % deletionfolders1800to2359
+    print "deletionfolders1800to2359 after filter: %s\n" % deletionfolders1800to2359
     
     #time to remove the folders
     for n in deletionfolders0000to0559:
@@ -235,9 +235,40 @@ def dailycleanup(debugging,folder,year,month,day):
       print command
       subprocess.call(command,shell=True)
 
+def createpriordaysforweekly(thismonth,today):
+  """Create numbers for searching for day"""
+  days = []
+  days2 = [[],[]]
+  months = []
+  for n in range(1,int(today)-6):
+    print n
+    days.append(n)
+  if(len(days)<7): #also need to modify days to match up with months
+    if int(thismonth) == 1:
+      months = ["12","1"]
+      for n in range(0,7-len(days)):
+	days2[0].append(31-n)
+      days2[1]=list(days)
+    else:
+      months = [str(int(thismonth)-1),thismonth]
+      for n in range(0,7-len(days)):
+	if months[0] == "2":
+	  days2[0].append(28-n)
+	elif months[0] == "1" or "3" or "5" or "7" or "8" or "10" or "12":
+	  days2[0].append(31-n)
+	elif months[0] == "4" or "6" or "9" or "11":
+	  days2[0].append(30-n)
+      days2[1]=list(days)
+  else:
+    months = [thismonth]
+    days2 = list(days)
+  return (months,days2)
+
 def weeklycleanup(debugging,folder,year,month,day):
   """Leave One week of backups with the previous frequency: 4 backups per day.
   For weeks prior to this one, eliminite 3/4 of those, leaving one per day."""
+  deletionfoldersPhase1 = []
+  
   if(debugging):
     print "*********************************"
     print "Hey, I'm in weeklycleanup!!"
@@ -246,9 +277,30 @@ def weeklycleanup(debugging,folder,year,month,day):
     print "month: %s" % month
     print "day: %s" % day
     print "*********************************\n"
+    (months,days) = createpriordaysforweekly(month,day)
+    print "Days: %s" % days
+    print "len(days[0]): %s" % len(days[0])
+    print "len(days[1]): %s" % len(days[1])
+    print "Months: %s" % months
+    print "For debug we want the folder to be a bit different"
+    folder = "test-folder-deletion"
+    print "New folder: %s" % folder
   else:
     print "something soon"
-
+  if len(months) == 1:
+    for n in range(0,len(days)):
+	deletionfoldersPhase1.append(glob.glob("%s/%s-%s-%02d*" % (folder,year,months,days[n])))
+	deletionfoldersPhase1 = filter(None,deletionfoldersPhase1) #gets rid of empty elements. Usually will only happen if computer isn't on at least once per day
+	print "deletionfoldersPhase1: %s" % deletionfoldersPhase1
+  elif len(months) == 2:
+    for n in range(0,len(days[0])):
+	deletionfoldersPhase1.append(glob.glob("%s/%s-%02d-%02d*" % (folder,year,int(months[0]),days[0][n])))
+    deletionfoldersPhase1 = filter(None,deletionfoldersPhase1) #gets rid of empty elements. Usually will only happen if computer isn't on at least once per day
+    print "deletionfoldersPhase1: %s\n" % deletionfoldersPhase1
+    for n in range(0,len(days[1])):
+	deletionfoldersPhase1.append(glob.glob("%s/%s-%02d-%02d*" % (folder,year,int(months[1]),days[1][n])))
+    deletionfoldersPhase1 = filter(None,deletionfoldersPhase1) #gets rid of empty elements. Usually will only happen if computer isn't on at least once per day
+    print "deletionfoldersPhase1: %s" % deletionfoldersPhase1
 
 #Setting up variables
 #dates
@@ -263,4 +315,4 @@ if(debugit):
 snapshot(debugit,localfolder)
 Copysnapshot(debugit)
 dailycleanup(debugit,localfolderbase,Year,Month,Day)
-weeklycleanup(debugit,localfolderbase,Year,Month,Day)
+#weeklycleanup(debugit,localfolderbase,Year,Month,Day)
