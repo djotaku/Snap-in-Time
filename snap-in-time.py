@@ -1,5 +1,5 @@
 __author__ = "Eric Mesa"
-__version__ = "v0.2"
+__version__ = "v0.3.1"
 __license__ = "GNU GPL v3.0"
 __copyright__ = "(c) 2014 Eric Mesa"
 __email__ = "ericsbinaryworld at gmail dot com"
