@@ -98,6 +98,41 @@ def dailycleanup(debugging,folder,year,month,day):
     print "deletionfolders0600to1159: %s" % deletionfolders0600to1159
     print "deletionfolders1200to1759: %s" % deletionfolders1200to1759
     print "deletionfolders1800to2359: %s" % deletionfolders1800to2359
+    tokeep = "0000"
+    for n in range(0,len(deletionfolders0000to0559)):
+      if int(deletionfolders0000to0559[n][-3]) > int(tokeep[-3]) :
+	tokeep = deletionfolders0000to0559[n]
+    print "deletionfolders0000to0559 before filter: %s" % deletionfolders0000to0559
+    print "to keep is: %s" % tokeep
+    deletionfolders0000to0559 = [v for v in deletionfolders0000to0559 if v not in tokeep]
+    print "deletionfolders0000to0559 after filter: %s" % deletionfolders0000to0559
+    
+    tokeep = "0000"
+    for n in range(0,len(deletionfolders0600to1159)):
+      if int(deletionfolders0600to1159[n][-4:]) > int(tokeep[-4:]) :
+	tokeep = deletionfolders0600to1159[n]
+    print "deletionfolders0600to1159 before filter: %s" % deletionfolders0600to1159
+    print "to keep is: %s" % tokeep
+    deletionfolders0600to1159 = [v for v in deletionfolders0600to1159 if v not in tokeep]
+    print "deletionfolders0600to1159 after filter: %s" % deletionfolders0600to1159
+    
+    tokeep = "0000"
+    for n in range(0,len(deletionfolders1200to1759)):
+      if int(deletionfolders1200to1759[n][-4:]) > int(tokeep[-4:]) :
+	tokeep = deletionfolders1200to1759[n]
+    print "deletionfolders1200to1759 before filter: %s" % deletionfolders1200to1759
+    print "to keep is: %s" % tokeep
+    deletionfolders1200to1759 = [v for v in deletionfolders1200to1759 if v not in tokeep]
+    print "deletionfolders1200to1759 after filter: %s" % deletionfolders1200to1759
+    
+    tokeep = "0000"
+    for n in range(0,len(deletionfolders1800to2359)):
+      if int(deletionfolders1800to2359[n][-4:]) > int(tokeep[-4:]) :
+	tokeep = deletionfolders1800to2359[n]
+    print "deletionfolders1800to2359 before filter: %s" % deletionfolders1800to2359
+    print "to keep is: %s" % tokeep
+    deletionfolders1800to2359 = [v for v in deletionfolders1800to2359 if v not in tokeep]
+    print "deletionfolders1800to2359 after filter: %s" % deletionfolders1800to2359
     print "*********************************\n"
   else:
     print "will do stuff soon"
