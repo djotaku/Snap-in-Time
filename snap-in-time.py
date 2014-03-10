@@ -58,6 +58,10 @@ def dailycleanup(debugging,folder,year,month,day):
   Here's where things get tough. This is super easy to do if the computer's on 24 hours a day. But what if it's sporadically turned off?
   Then how do we determine which ones to get rid of?"""
   deletionfoldersPhase1 = []
+  deletionfolders0000to0559 = []
+  deletionfolders0600to1159 = []
+  deletionfolders1200to1759 = []
+  deletionfolders1800to2359 = []
   if(debugging):
     print "*********************************"
     print "Hey, I'm in dailycleanup!!"
@@ -69,6 +73,7 @@ def dailycleanup(debugging,folder,year,month,day):
     print "Days: %s" % days
     for n in range(0,len(days)):
       deletionfoldersPhase1.append(glob.glob("test-folder-deletion/%s-%s-%02d*" % (year,month,days[n])))
+    deletionfoldersPhase1 = filter(None,deletionfoldersPhase1) #gets rid of empty elements. Usually will only happen if computer isn't on at least once per day
     print "deletionfoldersPhase1: %s" % deletionfoldersPhase1
     print "*********************************\n"
   else:
