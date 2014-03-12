@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 __author__ = "Eric Mesa"
 __version__ = "v0.3.1"
 __license__ = "GNU GPL v3.0"
@@ -226,22 +228,25 @@ def weeklycleanup(debugging,folder,year,month,day):
     print "For debug we want the folder to be a bit different"
     folder = "test-folder-deletion"
     print "New folder: %s" % folder
-  else:
-    print "something soon"
-  if len(months) == 1:
-    for n in range(0,len(days)):
+    
+    if len(months) == 1:
+     for n in range(0,len(days)):
 	deletionfoldersPhase1.append(glob.glob("%s/%s-%s-%02d*" % (folder,year,months,days[n])))
 	deletionfoldersPhase1 = filter(None,deletionfoldersPhase1) #gets rid of empty elements. Usually will only happen if computer isn't on at least once per day
 	print "deletionfoldersPhase1: %s" % deletionfoldersPhase1
-  elif len(months) == 2:
-    for n in range(0,len(days[0])):
+    elif len(months) == 2:
+      for n in range(0,len(days[0])):
 	deletionfoldersPhase1.append(glob.glob("%s/%s-%02d-%02d*" % (folder,year,int(months[0]),days[0][n])))
-    deletionfoldersPhase1 = filter(None,deletionfoldersPhase1) #gets rid of empty elements. Usually will only happen if computer isn't on at least once per day
-    print "deletionfoldersPhase1: %s\n" % deletionfoldersPhase1
-    for n in range(0,len(days[1])):
+      deletionfoldersPhase1 = filter(None,deletionfoldersPhase1) #gets rid of empty elements. Usually will only happen if computer isn't on at least once per day
+      print "deletionfoldersPhase1: %s\n" % deletionfoldersPhase1
+      for n in range(0,len(days[1])):
 	deletionfoldersPhase1.append(glob.glob("%s/%s-%02d-%02d*" % (folder,year,int(months[1]),days[1][n])))
-    deletionfoldersPhase1 = filter(None,deletionfoldersPhase1) #gets rid of empty elements. Usually will only happen if computer isn't on at least once per day
-    print "deletionfoldersPhase1: %s" % deletionfoldersPhase1
+      deletionfoldersPhase1 = filter(None,deletionfoldersPhase1) #gets rid of empty elements. Usually will only happen if computer isn't on at least once per day
+      print "deletionfoldersPhase1: %s" % deletionfoldersPhase1
+    
+  else:
+    print "something soon"
+  
 
 #Setting up variables
 #dates
@@ -256,4 +261,4 @@ if(debugit):
 snapshot(debugit,localfolder)
 Copysnapshot(debugit)
 dailycleanup(debugit,localfolderbase,Year,Month,Day)
-#weeklycleanup(debugit,localfolderbase,Year,Month,Day)
+weeklycleanup(debugit,localfolderbase,Year,Month,Day)

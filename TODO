@@ -1,3 +1,4 @@
 TODO:
 
 -Fix dailycleanup to handle the first couple days of the month.
+-add commandline option to run as root or sudo
