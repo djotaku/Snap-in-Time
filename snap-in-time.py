@@ -27,7 +27,8 @@ def snapshot(debugging,snapshotfolder):
     print "btrfs snapshot will go in: %s" % snapshotfolder
     print "*********************************\n"
   else:
-    command = "sudo btrfs sub snapshot -r /home %s" % snapshotfolder
+    #command = "sudo btrfs sub snapshot -r /home %s" % snapshotfolder
+    command = "btrfs sub snapshot -r /home %s" % snapshotfolder
     subprocess.call(command, shell=True) #don't need sudo if run as root
     
   
@@ -82,7 +83,8 @@ def btrfsdeletion(folderlist):
   
   #time to remove the btrfs
   for n in folderlist:
-    command = "sudo btrfs subvolume delete %s" % n
+    #command = "sudo btrfs subvolume delete %s" % n
+    command = "btrfs subvolume delete %s" % n
     print command
     subprocess.call(command,shell=True)
     
