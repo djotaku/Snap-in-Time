@@ -1,4 +1,4 @@
 TODO:
 
--Fix dailycleanup to handle the first couple days of the month.
+-Fix dailycleanup to handle the first couple days of the month. (meaning it looks into the two days of the previous month)
 -add commandline option to run as root or sudo

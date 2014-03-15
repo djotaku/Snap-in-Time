@@ -1,7 +1,7 @@
 Snap-in-Time
 ============
 
-script for btrfs backups to create hourly backups and cull the backups.
+script for btrfs backups to create hourly snapshots & backups and cull the snapshots & backups.
 
 The script should be added to root's cron job (or the user, but to really work correctly should have the sudoers file edited to let this script run without a password) running hourly.
 (use "which python" on the commandline to make sure it'll run without changing the first line)
