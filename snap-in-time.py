@@ -51,6 +51,7 @@ def getdate():
 def createpriordays(today):
   """Create numbers for searching for day"""
   days = []
+  print "Calculating days until today -2"
   for n in range(1,int(today)-1):
     print n
     days.append(n)
