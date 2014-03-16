@@ -12,7 +12,7 @@ For right now here's what the script does:
 
 Future things it will do:
 -Send them to a backup drive so they will actually protect against hardware failure
--Similar culling on the weekly, quarterly, and yearly scale. I'm basing it on a conversation I had in the btrfs mailing list. Here's how the guy who inspired me explained it to me:
+-Similar culling on the weekly, quarterly, and yearly scale. I'm basing it on a conversation I had in the btrfs mailing list. Here's how the guy who inspired me, Duncan, explained it to me:
 
 "However, best snapshot management practice does progressive snapshot 
 thinning, so you never have more than a few hundred snapshots to manage 
