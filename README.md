@@ -103,4 +103,4 @@ several years worth of snapshots (well beyond the normal life of the
 storage media) and still be in the low 200s snapshots total, while 
 keeping them reasonably easy to manage. =:^)"
 
-Commit dedicated to my daughter who had surgery today
+Commit dedicated to my daughter who is recovering from surgery yesterday
