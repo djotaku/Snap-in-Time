@@ -219,7 +219,32 @@ def createpriordaysmaster(thismonth,today,whichrange):
   days2 = [[],[]]
   months = []
   if whichrange == "daily":
-    print "daily"
+    if int(today) > 3:
+      for n in range(2,1,-1):
+	days.append(int(today)-n)
+      months = [thismonth]
+      days2 = list(days)
+    else:
+      for n in range(2,1,-1):
+	if int(today)-n > 0:
+	  days.append(int(today)-n)
+	  
+      if int(thismonth) == 1:
+	months = ["12","1"]
+	for n in range(2-len(days),1,-1):
+	  days2[0].append((32+len(days))-n)
+	days2[1]=list(days)
+      else:
+	months = [str(int(thismonth)-1),thismonth]
+	for n in range(2-len(days),1,-1):
+	  if months[0] == "2":
+	    days2[0].append((29+len(days))-n)
+	  elif months[0] == "1" or "3" or "5" or "7" or "8" or "10" or "12":
+	    days2[0].append((32+len(days))-n)
+	  elif months[0] == "4" or "6" or "9" or "11":
+	    days2[0].append((31+len(days))-n)
+	days2[1]=list(days)
+	  
   elif whichrange == "weekly":
     if int(today) > 13:
       for n in range(13,6,-1):
