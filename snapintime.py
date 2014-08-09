@@ -287,6 +287,10 @@ def weeklycleanup(debugging,folder,year,month,day):
       print "deletionfoldersPhase1: %s" % deletionfoldersPhase1
     
   else:
+    print "Days: %s" % days
+    print "len(days[0]): %s" % len(days[0])
+    print "len(days[1]): %s" % len(days[1])
+    print "Months: %s" % months
     (months,days) = createpriordaysmaster(month,day,"weekly")
     if len(months) == 1:
      for n in range(0,len(days)):
@@ -301,7 +305,7 @@ def weeklycleanup(debugging,folder,year,month,day):
       for n in range(0,len(days[1])):
 	deletionfoldersPhase1.append(glob.glob("%s/%s-%02d-%02d*" % (folder,year,int(months[1]),days[1][n])))
       deletionfoldersPhase1 = filter(None,deletionfoldersPhase1) #gets rid of empty elements. Usually will only happen if computer isn't on at least once per day
-      print "deletionfoldersPhase1: %s" % deletionfoldersPhase1
+      print "deletionfoldersPhase1: %s\n" % deletionfoldersPhase1
   
 if __name__=="__main__":
   #Setting up variables
