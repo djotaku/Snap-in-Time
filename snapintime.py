@@ -221,14 +221,18 @@ def createpriordaysmaster(thismonth,today,whichrange):
   if whichrange == "daily":
     print "daily"
   elif whichrange == "weekly":
-    print "weekly"
+    if int(today) > 13:
+      for n in range(13,6,-1):
+	days.append(int(today)-n)
+    else:
+      for n in range(13,6,-1):
+	if int(today)-n > 0:
+	  days.append(int(today)-n)
   elif whichrange == "quarterly":
     print "quarterly"
   elif whichrange == "yearly":
     print "yearly"
-  for n in range(1,int(today)-6):
-    print n
-    days.append(n)
+
   if(len(days)<7): #also need to modify days to match up with months
     if int(thismonth) == 1:
       months = ["12","1"]
