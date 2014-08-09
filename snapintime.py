@@ -245,7 +245,7 @@ def dailycleanup(debugging,folder,year,month,day):
     print "*********************************\n"
   else:
     #days = createpriordays(day)
-    (months,days) = createpriordaysmaster(month,day,"daily") #make this a tuple that also gets the month for when it's the first of the month
+    (months,days) = createpriordaysmaster(month,day,"daily") #fix for prior month?
     for n in range(0,len(days)):
       deletionfoldersPhase1.append(glob.glob("%s/%s-%s-%02d*" % (folder,year,months,days[n])))
       deletionfoldersPhase1 = filter(None,deletionfoldersPhase1) #gets rid of empty elements. Usually will only happen if computer isn't on at least once per day
@@ -335,6 +335,9 @@ def weeklycleanup(debugging,folder,year,month,day):
 	deletionfoldersPhase1.append(glob.glob("%s/%s-%02d-%02d*" % (folder,year,int(months[1]),days[1][n])))
       deletionfoldersPhase1 = filter(None,deletionfoldersPhase1) #gets rid of empty elements. Usually will only happen if computer isn't on at least once per day
       print "deletionfoldersPhase1: %s\n" % deletionfoldersPhase1
+      
+    for n in range(0,len(deletionfoldersPhase1)):
+      btrfsdeletion(deletionfoldersPhase1[n])  
   
 if __name__=="__main__":
   #Setting up variables
