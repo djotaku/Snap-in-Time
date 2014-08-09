@@ -25,14 +25,49 @@ class PriorDays(unittest.TestCase):
    self.assertEqual((['1'],[8,9,10,11,12,13,14]),result)
 
   def testWeeklyEarlyinMonthFeb(self):
-   """createpriordaysmaster should produce the right days for a weekly test if it has to go to the previous month"""
+   """createpriordaysmaster should produce the right days for a weekly test if it has to go to the previous month."""
    result = snapintime.createpriordaysmaster("2","13","weekly")
    self.assertEqual((['1','2'],[[31],[1,2,3,4,5,6]]),result)
+
+  def testWeeklyEarlyinMonthFeb2(self):
+   """createpriordaysmaster should produce the right days for a weekly test if it has to go to the previous month."""
+   result = snapintime.createpriordaysmaster("2","12","weekly")
+   self.assertEqual((['1','2'],[[30,31],[1,2,3,4,5]]),result)
+
+  def testWeeklyEarlyinMonthFeb3(self):
+   """createpriordaysmaster should produce the right days for a weekly test if it has to go to the previous month."""
+   result = snapintime.createpriordaysmaster("2","8","weekly")
+   self.assertEqual((['1','2'],[[26,27,28,29,30,31],[1]]),result)
+
+  def testWeeklyEarlyinMonthFeb3(self):
+   """createpriordaysmaster should produce the right days for a weekly test if it has to go to the previous month."""
+   result = snapintime.createpriordaysmaster("2","7","weekly")
+   self.assertEqual((['1','2'],[[25,26,27,28,29,30,31],[]]),result)
+
+  def testWeeklyEarlyinMonthFeb4(self):
+   """createpriordaysmaster should produce the right days for a weekly test if it has to go to the previous month."""
+   result = snapintime.createpriordaysmaster("2","6","weekly")
+   self.assertEqual((['1','2'],[[24,25,26,27,28,29,30],[]]),result)
 
   def testWeeklyEarliestinMonthFeb(self):
    """createpriordaysmaster should produce the right days for a weekly test if it has to go to the previous month, even if it's day 1"""
    result = snapintime.createpriordaysmaster("2","1","weekly")
    self.assertEqual((['1','2'],[[19,20,21,22,23,24,25],[]]),result)
+
+  def testWeeklyEarlyinMonthMarch(self):
+    """createpriordaysmaster should produce the right days for a weekly test if it has to go to the previous month"""
+    result = snapintime.createpriordaysmaster("3","9","weekly")
+    self.assertEqual((['2','3'],[[24,25,26,27,28],[1,2]]),result)
+
+  def testWeeklyEarlyinMonthApril(self):
+   """createpriordaysmaster should produce the right days for a weekly test if it has to go to the previous month"""
+   result = snapintime.createpriordaysmaster("4","9","weekly")
+   self.assertEqual((['3','4'],[[27,28,29,30,31],[1,2]]),result)
+
+  def testWeeklyEarlyinMonthAug(self):
+   """createpriordaysmaster should produce the right days for a weekly test if it has to go to the previous month"""
+   result = snapintime.createpriordaysmaster("8","9","weekly")
+   self.assertEqual((['7','8'],[[27,28,29,30,31],[1,2]]),result)
 
     
 if __name__=="__main__":
