@@ -287,11 +287,13 @@ def weeklycleanup(debugging,folder,year,month,day):
       print "deletionfoldersPhase1: %s" % deletionfoldersPhase1
     
   else:
+    (months,days) = createpriordaysmaster(month,day,"weekly")
+    
     print "Days: %s" % days
     print "len(days[0]): %s" % len(days[0])
     print "len(days[1]): %s" % len(days[1])
     print "Months: %s" % months
-    (months,days) = createpriordaysmaster(month,day,"weekly")
+    
     if len(months) == 1:
      for n in range(0,len(days)):
 	deletionfoldersPhase1.append(glob.glob("%s/%s-%s-%02d*" % (folder,year,months,days[n])))
