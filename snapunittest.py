@@ -73,7 +73,56 @@ class PriorDays(unittest.TestCase):
    """createpriordaysmaster should produce the right days for a weekly test if it has to go to the previous month"""
    result = snapintime.createpriordaysmaster("8","9","weekly")
    self.assertEqual((['7','8'],[[27,28,29,30,31],[1,2]]),result)
+   
+  #def testFirstQuarter(self):
+   #"""createpriordaysmaster should produce the right days for a weekly test if it has to go to the previous month"""
+   #result = snapintime.createpriordaysmaster("1","9","quarterly")
+   #self.assertEqual((['10','11','12'],[]),result)   
 
-    
+  def testSecondQuarterApril(self):
+   """createpriordaysmaster should produce the right days for a quartly test """
+   result = snapintime.createpriordaysmaster("4","9","quarterly")
+   self.assertEqual((['1','2','3'],[]),result)
+
+  def testSecondQuarterMay(self):
+   """createpriordaysmaster should produce the right days for a quartly test """
+   result = snapintime.createpriordaysmaster("5","9","quarterly")
+   self.assertEqual((['1','2','3'],[]),result)
+   
+  def testSecondQuarterJune(self):
+   """createpriordaysmaster should produce the right days for a quartly test """
+   result = snapintime.createpriordaysmaster("6","9","quarterly")
+   self.assertEqual((['1','2','3'],[]),result)   
+
+  def testThirdQuarterJuly(self):
+   """createpriordaysmaster should produce the right days for a quartly test """
+   result = snapintime.createpriordaysmaster("7","9","quarterly")
+   self.assertEqual((['4','5','6'],[]),result)
+
+  def testThirdQuarterAugust(self):
+   """createpriordaysmaster should produce the right days for a quartly test """
+   result = snapintime.createpriordaysmaster("8","9","quarterly")
+   self.assertEqual((['4','5','6'],[]),result)
+   
+  def testThirdQuarterSeptember(self):
+   """createpriordaysmaster should produce the right days for a quartly test """
+   result = snapintime.createpriordaysmaster("9","9","quarterly")
+   self.assertEqual((['4','5','6'],[]),result)   
+   
+  def testFourthQuarterOctober(self):
+   """createpriordaysmaster should produce the right days for a quartly test """
+   result = snapintime.createpriordaysmaster("10","9","quarterly")
+   self.assertEqual((['7','8','9'],[]),result) 
+
+  def testFourthQuarterNovember(self):
+   """createpriordaysmaster should produce the right days for a quartly test """
+   result = snapintime.createpriordaysmaster("11","9","quarterly")
+   self.assertEqual((['7','8','9'],[]),result) 
+
+  def testFourthQuarterDecember(self):
+   """createpriordaysmaster should produce the right days for a quartly test """
+   result = snapintime.createpriordaysmaster("12","9","quarterly")
+   self.assertEqual((['7','8','9'],[]),result)    
+   
 if __name__=="__main__":
   unittest.main()
