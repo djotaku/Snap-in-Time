@@ -57,6 +57,76 @@ def createpriordays(today):
     days.append(n)
   return days
 
+def createpriordaysmaster(thismonth,today,whichrange):
+  """Create numbers for searching for day
+  thismonth is the number for the month (ie 1-12)
+  today is today's date (the day number (ie 1-31)
+  whichrange is used to determine if this is daily, weekly, quarterly, or yearly"""
+  days = []
+  days2 = [[],[]]
+  months = []
+  if whichrange == "daily":
+    if int(today) > 3:
+      for n in range(2,1,-1):
+	days.append(int(today)-n)
+      months = thismonth
+      days2 = list(days)
+    else:
+      for n in range(2,1,-1):
+	if int(today)-n > 0:
+	  days.append(int(today)-n)
+	  
+      if int(thismonth) == 1:
+	months = "12" 
+	for n in range(2-len(days),1,-1):
+	  days.append((32+len(days))-n) #fix this to be like above so that it is a 1D array
+	days2=list(days)
+      else:
+	months =str(int(thismonth)-1)
+	for n in range(2-len(days),1,-1):
+	  if months[0] == "2":
+	    days.append((29+len(days))-n)
+	  elif months[0] == "1" or "3" or "5" or "7" or "8" or "10" or "12":
+	    days.append((32+len(days))-n)
+	  elif months[0] == "4" or "6" or "9" or "11":
+	    days.append((31+len(days))-n)
+	days2=list(days)
+	  
+  elif whichrange == "weekly":
+    if int(today) > 13:
+      for n in range(13,6,-1):
+	days.append(int(today)-n)
+      months = [thismonth]
+      days2 = list(days)
+    else:
+      for n in range(13,6,-1):
+	if int(today)-n > 0:
+	  days.append(int(today)-n)
+      
+      if int(thismonth) == 1:
+	months = ["12","1"]
+	for n in range(13-len(days),6,-1):
+	  days2[0].append((32+len(days))-n)
+	days2[1]=list(days)
+      else:
+	months = [str(int(thismonth)-1),thismonth]
+	for n in range(13-len(days),6,-1):
+	  if months[0] == "2":
+	    days2[0].append((29+len(days))-n)
+	  elif months[0] == "1" or "3" or "5" or "7" or "8" or "10" or "12":
+	    days2[0].append((32+len(days))-n)
+	  elif months[0] == "4" or "6" or "9" or "11":
+	    days2[0].append((31+len(days))-n)
+	days2[1]=list(days)
+  elif whichrange == "quarterly":
+    print "quarterly"
+  elif whichrange == "yearly":
+    print "yearly"
+    
+  return (months,days2)
+
+
+
 def folderdeletion(folderlist):
   tokeep = "0000"
   for n in range(0,len(folderlist)):
@@ -150,9 +220,10 @@ def dailycleanup(debugging,folder,year,month,day):
       
     print "*********************************\n"
   else:
-    days = createpriordays(day)
+    #days = createpriordays(day)
+    (months,days) = createpriordaysmaster(month,day,"daily") #make this a tuple that also gets the month for when it's the first of the month
     for n in range(0,len(days)):
-      deletionfoldersPhase1.append(glob.glob("%s/%s-%s-%02d*" % (folder,year,month,days[n])))
+      deletionfoldersPhase1.append(glob.glob("%s/%s-%s-%02d*" % (folder,year,months,days[n])))
       deletionfoldersPhase1 = filter(None,deletionfoldersPhase1) #gets rid of empty elements. Usually will only happen if computer isn't on at least once per day
       for n in range(0,len(deletionfoldersPhase1)):
 	for i in range(0,len(deletionfoldersPhase1[n])):
@@ -208,74 +279,6 @@ def createpriordaysforweekly(thismonth,today):
   else:
     months = [thismonth]
     days2 = list(days)
-  return (months,days2)
-
-def createpriordaysmaster(thismonth,today,whichrange):
-  """Create numbers for searching for day
-  thismonth is the number for the month (ie 1-12)
-  today is today's date (the day number (ie 1-31)
-  whichrange is used to determine if this is daily, weekly, quarterly, or yearly"""
-  days = []
-  days2 = [[],[]]
-  months = []
-  if whichrange == "daily":
-    if int(today) > 3:
-      for n in range(2,1,-1):
-	days.append(int(today)-n)
-      months = [thismonth]
-      days2 = list(days)
-    else:
-      for n in range(2,1,-1):
-	if int(today)-n > 0:
-	  days.append(int(today)-n)
-	  
-      if int(thismonth) == 1:
-	months = ["12","1"]
-	for n in range(2-len(days),1,-1):
-	  days2[0].append((32+len(days))-n)
-	days2[1]=list(days)
-      else:
-	months = [str(int(thismonth)-1),thismonth]
-	for n in range(2-len(days),1,-1):
-	  if months[0] == "2":
-	    days2[0].append((29+len(days))-n)
-	  elif months[0] == "1" or "3" or "5" or "7" or "8" or "10" or "12":
-	    days2[0].append((32+len(days))-n)
-	  elif months[0] == "4" or "6" or "9" or "11":
-	    days2[0].append((31+len(days))-n)
-	days2[1]=list(days)
-	  
-  elif whichrange == "weekly":
-    if int(today) > 13:
-      for n in range(13,6,-1):
-	days.append(int(today)-n)
-      months = [thismonth]
-      days2 = list(days)
-    else:
-      for n in range(13,6,-1):
-	if int(today)-n > 0:
-	  days.append(int(today)-n)
-      
-      if int(thismonth) == 1:
-	months = ["12","1"]
-	for n in range(13-len(days),6,-1):
-	  days2[0].append((32+len(days))-n)
-	days2[1]=list(days)
-      else:
-	months = [str(int(thismonth)-1),thismonth]
-	for n in range(13-len(days),6,-1):
-	  if months[0] == "2":
-	    days2[0].append((29+len(days))-n)
-	  elif months[0] == "1" or "3" or "5" or "7" or "8" or "10" or "12":
-	    days2[0].append((32+len(days))-n)
-	  elif months[0] == "4" or "6" or "9" or "11":
-	    days2[0].append((31+len(days))-n)
-	days2[1]=list(days)
-  elif whichrange == "quarterly":
-    print "quarterly"
-  elif whichrange == "yearly":
-    print "yearly"
-    
   return (months,days2)
 
 def weeklycleanup(debugging,folder,year,month,day):

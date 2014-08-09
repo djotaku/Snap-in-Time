@@ -7,12 +7,12 @@ class PriorDays(unittest.TestCase):
   def testDaily(self):
     """createpriordaysmaster should produce the right days for a daily test in the middle of the month"""
     result = snapintime.createpriordaysmaster("1","14","daily")
-    self.assertEqual((['1'],[12]),result)
+    self.assertEqual(('1',[12]),result)
     
   def testDailyMonthDay1Feb(self):
     """createpriordaysmaster should produce the right days for a daily test in the middle of the month"""
     result = snapintime.createpriordaysmaster("2","1","daily")
-    self.assertEqual((['1','2'],[[30],[]]),result) 
+    self.assertEqual(('1',[30]),result) 
   
   def testWeekly(self):
    """createpriordaysmaster should produce the right days for a weekly test"""
