@@ -315,26 +315,20 @@ def weeklycleanup(debugging,folder,year,month,day):
     
   else:
     (months,days) = createpriordaysmaster(month,day,"weekly")
-    
-    print "Days: %s" % days
-    print "len(days[0]): %s" % len(days[0])
-    print "len(days[1]): %s" % len(days[1])
-    print "Months: %s" % months
-    
     if len(months) == 1:
      for n in range(0,len(days)):
 	deletionfoldersPhase1.append(glob.glob("%s/%s-%s-%02d*" % (folder,year,months,days[n])))
 	deletionfoldersPhase1 = filter(None,deletionfoldersPhase1) #gets rid of empty elements. Usually will only happen if computer isn't on at least once per day
-	print "deletionfoldersPhase1: %s" % deletionfoldersPhase1
+	#print "deletionfoldersPhase1: %s" % deletionfoldersPhase1
     elif len(months) == 2:
       for n in range(0,len(days[0])):
 	deletionfoldersPhase1.append(glob.glob("%s/%s-%02d-%02d*" % (folder,year,int(months[0]),days[0][n])))
       deletionfoldersPhase1 = filter(None,deletionfoldersPhase1) #gets rid of empty elements. Usually will only happen if computer isn't on at least once per day
-      print "deletionfoldersPhase1: %s\n" % deletionfoldersPhase1
+      #print "deletionfoldersPhase1: %s\n" % deletionfoldersPhase1
       for n in range(0,len(days[1])):
 	deletionfoldersPhase1.append(glob.glob("%s/%s-%02d-%02d*" % (folder,year,int(months[1]),days[1][n])))
       deletionfoldersPhase1 = filter(None,deletionfoldersPhase1) #gets rid of empty elements. Usually will only happen if computer isn't on at least once per day
-      print "deletionfoldersPhase1: %s\n" % deletionfoldersPhase1
+      #print "deletionfoldersPhase1: %s\n" % deletionfoldersPhase1
       
     for n in range(0,len(deletionfoldersPhase1)):
       btrfsdeletion(deletionfoldersPhase1[n])  

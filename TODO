@@ -1,4 +1,8 @@
 TODO:
 
--Fix dailycleanup to handle the first couple days of the month. (meaning it looks into the two days of the previous month)
+-Quarterly
+-Yearly
+-Have daily handle january (needs to go back a year to december)
+-Have weekly handle january (needs to go back a year to december)
+-Have quartly handle january (needs to go back a year to december)
 -add commandline option to run as root or sudo

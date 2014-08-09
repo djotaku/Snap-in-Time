@@ -65,7 +65,7 @@ You can see that it is working correctly on the daily level.
 
 Future things it will do:
 -Send them to a backup drive so they will actually protect against hardware failure
--Similar culling on the weekly, quarterly, and yearly scale. I'm basing it on a conversation I had in the btrfs mailing list. Here's how the guy who inspired me, Duncan, explained it to me:
+-Similar culling on the quarterly, and yearly scale. I'm basing it on a conversation I had in the btrfs mailing list. Here's how the guy who inspired me, Duncan, explained it to me:
 
 "However, best snapshot management practice does progressive snapshot 
 thinning, so you never have more than a few hundred snapshots to manage 
@@ -102,5 +102,3 @@ quarter.  At 191 for the latest year plus one a quarter you can have
 several years worth of snapshots (well beyond the normal life of the 
 storage media) and still be in the low 200s snapshots total, while 
 keeping them reasonably easy to manage. =:^)"
-
-Commit dedicated to my toddler daughter who is recovering from surgery yesterday
