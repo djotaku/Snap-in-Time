@@ -125,8 +125,6 @@ def createpriordaysmaster(thismonth,today,whichrange):
     
   return (months,days2)
 
-
-
 def folderdeletion(folderlist):
   tokeep = "0000"
   for n in range(0,len(folderlist)):
@@ -159,7 +157,6 @@ def btrfsdeletion(folderlist):
     print command
     subprocess.call(command,shell=True)
     
-
 def dailycleanup(debugging,folder,year,month,day):
   """Keep 2 days worth of backups. After that, only keep 4 backups per day - ideally separated by six hours.
   Currently will not properly handle things when it's the 1st or 2nd of the month."""
@@ -252,35 +249,6 @@ def dailycleanup(debugging,folder,year,month,day):
       deletionfolders1200to1759 = []
       deletionfolders1800to2359 = []
 
-def createpriordaysforweekly(thismonth,today):
-  """Create numbers for searching for day"""
-  days = []
-  days2 = [[],[]]
-  months = []
-  for n in range(1,int(today)-6):
-    print n
-    days.append(n)
-  if(len(days)<7): #also need to modify days to match up with months
-    if int(thismonth) == 1:
-      months = ["12","1"]
-      for n in range(0,7-len(days)):
-	days2[0].append(31-n)
-      days2[1]=list(days)
-    else:
-      months = [str(int(thismonth)-1),thismonth]
-      for n in range(0,7-len(days)):
-	if months[0] == "2":
-	  days2[0].append(28-n)
-	elif months[0] == "1" or "3" or "5" or "7" or "8" or "10" or "12":
-	  days2[0].append(31-n)
-	elif months[0] == "4" or "6" or "9" or "11":
-	  days2[0].append(30-n)
-      days2[1]=list(days)
-  else:
-    months = [thismonth]
-    days2 = list(days)
-  return (months,days2)
-
 def weeklycleanup(debugging,folder,year,month,day):
   """Leave One week of backups with the previous frequency: 4 backups per day.
   For weeks prior to this one, eliminite 3/4 of those, leaving one per day."""
@@ -319,7 +287,20 @@ def weeklycleanup(debugging,folder,year,month,day):
       print "deletionfoldersPhase1: %s" % deletionfoldersPhase1
     
   else:
-    print "something soon"
+    if len(months) == 1:
+     for n in range(0,len(days)):
+	deletionfoldersPhase1.append(glob.glob("%s/%s-%s-%02d*" % (folder,year,months,days[n])))
+	deletionfoldersPhase1 = filter(None,deletionfoldersPhase1) #gets rid of empty elements. Usually will only happen if computer isn't on at least once per day
+	print "deletionfoldersPhase1: %s" % deletionfoldersPhase1
+    elif len(months) == 2:
+      for n in range(0,len(days[0])):
+	deletionfoldersPhase1.append(glob.glob("%s/%s-%02d-%02d*" % (folder,year,int(months[0]),days[0][n])))
+      deletionfoldersPhase1 = filter(None,deletionfoldersPhase1) #gets rid of empty elements. Usually will only happen if computer isn't on at least once per day
+      print "deletionfoldersPhase1: %s\n" % deletionfoldersPhase1
+      for n in range(0,len(days[1])):
+	deletionfoldersPhase1.append(glob.glob("%s/%s-%02d-%02d*" % (folder,year,int(months[1]),days[1][n])))
+      deletionfoldersPhase1 = filter(None,deletionfoldersPhase1) #gets rid of empty elements. Usually will only happen if computer isn't on at least once per day
+      print "deletionfoldersPhase1: %s" % deletionfoldersPhase1
   
 if __name__=="__main__":
   #Setting up variables
