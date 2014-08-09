@@ -224,34 +224,33 @@ def createpriordaysmaster(thismonth,today,whichrange):
     if int(today) > 13:
       for n in range(13,6,-1):
 	days.append(int(today)-n)
+      months = [thismonth]
+      days2 = list(days)
     else:
       for n in range(13,6,-1):
 	if int(today)-n > 0:
 	  days.append(int(today)-n)
+      
+      if int(thismonth) == 1:
+	months = ["12","1"]
+	for n in range(13-len(days),6,-1):
+	  days2[0].append((32+len(days))-n)
+	days2[1]=list(days)
+      else:
+	months = [str(int(thismonth)-1),thismonth]
+	for n in range(13-len(days),6,-1):
+	  if months[0] == "2":
+	    days2[0].append((29+len(days))-n)
+	  elif months[0] == "1" or "3" or "5" or "7" or "8" or "10" or "12":
+	    days2[0].append((32+len(days))-n)
+	  elif months[0] == "4" or "6" or "9" or "11":
+	    days2[0].append((31+len(days))-n)
+	days2[1]=list(days)
   elif whichrange == "quarterly":
     print "quarterly"
   elif whichrange == "yearly":
     print "yearly"
-
-  if(len(days)<7): #also need to modify days to match up with months
-    if int(thismonth) == 1:
-      months = ["12","1"]
-      for n in range(0,7-len(days)):
-	days2[0].append(31-n)
-      days2[1]=list(days)
-    else:
-      months = [str(int(thismonth)-1),thismonth]
-      for n in range(0,7-len(days)):
-	if months[0] == "2":
-	  days2[0].append(28-n)
-	elif months[0] == "1" or "3" or "5" or "7" or "8" or "10" or "12":
-	  days2[0].append(31-n)
-	elif months[0] == "4" or "6" or "9" or "11":
-	  days2[0].append(30-n)
-      days2[1]=list(days)
-  else:
-    months = [thismonth]
-    days2 = list(days)
+    
   return (months,days2)
 
 def weeklycleanup(debugging,folder,year,month,day):

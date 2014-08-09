@@ -19,6 +19,11 @@ class PriorDays(unittest.TestCase):
    result = snapintime.createpriordaysmaster("2","13","weekly")
    self.assertEqual((['1','2'],[[31],[1,2,3,4,5,6]]),result)
 
+  def testWeeklyEarliestinMonth(self):
+   """createpriordaysmaster should produce the right days for a weekly test if it has to go to the previous month, even if it's day 1"""
+   result = snapintime.createpriordaysmaster("2","1","weekly")
+   self.assertEqual((['1','2'],[[19,20,21,22,23,24,25],[]]),result)
+
     
 if __name__=="__main__":
   unittest.main()
