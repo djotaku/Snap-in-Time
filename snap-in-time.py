@@ -210,6 +210,46 @@ def createpriordaysforweekly(thismonth,today):
     days2 = list(days)
   return (months,days2)
 
+def createpriordaysmaster(thismonth,today,whichrange):
+  """Create numbers for searching for day
+  thismonth is the number for the month (ie 1-12)
+  today is today's date (the day number (ie 1-31)
+  whichrange is used to determine if this is daily, weekly, quarterly, or yearly"""
+  days = []
+  days2 = [[],[]]
+  months = []
+  if whichrange == "daily":
+    #something
+  elif whichrange == "weekly":
+    #something
+  elif whichrange == "quarterly":
+    #something
+  elif whichrange == "yearly":
+    #something
+  for n in range(1,int(today)-6):
+    print n
+    days.append(n)
+  if(len(days)<7): #also need to modify days to match up with months
+    if int(thismonth) == 1:
+      months = ["12","1"]
+      for n in range(0,7-len(days)):
+	days2[0].append(31-n)
+      days2[1]=list(days)
+    else:
+      months = [str(int(thismonth)-1),thismonth]
+      for n in range(0,7-len(days)):
+	if months[0] == "2":
+	  days2[0].append(28-n)
+	elif months[0] == "1" or "3" or "5" or "7" or "8" or "10" or "12":
+	  days2[0].append(31-n)
+	elif months[0] == "4" or "6" or "9" or "11":
+	  days2[0].append(30-n)
+      days2[1]=list(days)
+  else:
+    months = [thismonth]
+    days2 = list(days)
+  return (months,days2)
+
 def weeklycleanup(debugging,folder,year,month,day):
   """Leave One week of backups with the previous frequency: 4 backups per day.
   For weeks prior to this one, eliminite 3/4 of those, leaving one per day."""
