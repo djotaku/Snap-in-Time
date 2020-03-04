@@ -7,7 +7,6 @@ Use what have learned recently:
 -pytest unit tests from the beginning
 -mypy/static testing from beginning
 -flake8
--Sphinx documentation
 -Github CI
 -setup.py and setup.cfg for Python package
 -use config files rather than hard-coding
@@ -19,39 +18,16 @@ Remote location
 create_local_snapshots - create local snapshots
 Local_culling - thin the local snapshots
 Push_remote - needs to grab remote snapshots and determine newest one, needs to determine newest snapshot on remote, try a send to remote, verify that send worked
-utils/time - to provide current date, date - 3 days, date - 7 days, etc
 Maybe current snapintime.py (rename to snap_in_time.py) pulls it all together. If use arguments, use argparse
 
 For subprocess - look at the documentation because I was using it naively, and it may be possible that it can let me know if things didn’t work and why - for presenting to user, making decisions on whether to continue, mailing out error status?
 
-
-Explain that things got overly complex because I tried to figure daily, weekly, and monthly on my own. Yet with datetime module, I can get this stuff for free!!!!
-
-Also, maybe can use calendar module, or based on looking at examples, most likely wnat to use datetime with datetime.now(timezone.est) (or whatever timezone referers to my timezone. (Guess the timezone should also be specified in the config file) Then you can use math like: 
-
-Timedelta = datetime.timedelta(days, seconds,microseconds,milliseconds,minutes,hours, weeks)
-
-Datetime2 = datetime1 - timedelta
-
+====
 For utils/time:
 
 Function: 
 
-prior_date(startdate: datetime, year: int = 0, month: int = 0, day: int = 0) -> datetime
-
 Other functions that make lists make of priordate call returns. (If needed. Better to do a naive cull for the monthly cull - just looking at groups of 7 days and picking the last one?)
-
-For tests utils/time:
-
-Test_minus_day
-
-Test_minus_day_1st_of_month
-
-Test_minus_day_1st_of_year
-
-And similar for month and quarterly
-
-For yearly, just test_minus_year I think
 
 Culling
 
