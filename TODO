@@ -4,7 +4,6 @@ Use what have learned recently:
 
 -functional programming for easy unit testing - each should only be doing one thing (and should probably take arguments
 -make a package
--move all the __variable__ stuff currently in there to the __init__.py for the package
 -pytest unit tests from the beginning
 -mypy/static testing from beginning
 -flake8
