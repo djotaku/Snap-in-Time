@@ -49,6 +49,7 @@ def create_snapshot(date_suffix: datetime, subvol: str, backup_location: str):
     """
     command = f"/usr/sbin/btrfs sub snap -r {subvol} {backup_location}/{date_suffix}"
     raw_result = subprocess.run(command, capture_output=True, shell=True, check=True, text=True)
+    #  because check=True, need to do in a try, except and do something with the error
     result = {"Command": raw_result.args, "Return Code": raw_result.returncode, "Output": raw_result.stdout}
     return result
 
