@@ -9,5 +9,5 @@ htmlcov/*
 lib64
 *.egg*
 */.mypy_cache/*
-pyenv.cfg
+pyvenv.cfg
 *.coverage
