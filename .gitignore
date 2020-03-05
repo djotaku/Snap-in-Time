@@ -1,6 +1,11 @@
-*.kdev
+*.kdev4
 *.pyc
 bin/*
 lib/*
 include/*
 lib64/*
+docs/_build/*
+htmlcov/*
+lib64
+*.egg
+*/.mypy_cache/*
