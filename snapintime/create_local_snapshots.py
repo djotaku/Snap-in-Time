@@ -7,7 +7,9 @@ import subprocess
 
 def get_date_time() -> datetime:
     """Return the current time, uses system time zone."""
-    return datetime.now()
+    now = datetime.now()
+    date_suffix = now.strftime("%Y-%m-%d-%H%M")
+    return date_suffix
 
 
 def import_config() -> dict:
@@ -38,18 +40,26 @@ def iterate_configs(date_time: datetime, config: dict) -> list:
     return return_list
 
 
-def create_snapshot(date_time: datetime, subvol: str, backup_location: str):
-    date_suffix = date_time.strftime("%Y-%m-%d-%H%M") # maybe just have get_date_time return this?
-    print(date_suffix)
-    #  remember to use mroe advanced features of subprocess to know if command failed and to print what it's doing w/o needing to use all those print statements like you did last time.
-    return date_suffix
+def create_snapshot(date_suffix: datetime, subvol: str, backup_location: str):
+    """Create a btrfs snapshot.
+
+    :param date_suffix: a datetime object formatted to be the name of the snapshot
+    :param subvol: The subvolume to be snapshotted
+    :param backup_location: The folder in which to create the snapshot
+    """
+    command = f"/usr/sbin/btrfs sub snap -r {subvol} {backup_location}/{date_suffix}"
+    raw_result = subprocess.run(command, capture_output=True, shell=True, check=True, text=True)
+    result = {"Command": raw_result.args, "Return Code": raw_result.returncode, "Output": raw_result.stdout}
+    return result
 
 
 def main():
     date_time_for_backup = get_date_time()
     config = import_config()
     results = iterate_configs(date_time_for_backup, config)
-    print(results)
+    for result in results:
+        print(f"\nRan {result['Command']} with a return code of {result['Return Code']}")
+        print(f"Result was: {str(result['Output'])}\n")
 
 
 if __name__ == "__main__":
