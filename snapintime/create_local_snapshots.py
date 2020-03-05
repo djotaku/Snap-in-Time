@@ -5,10 +5,10 @@ import json
 import subprocess
 
 
-def get_date_time() -> datetime:
+def get_date_time() -> str:
     """Return the current time, uses system time zone."""
-    now = datetime.now()
-    date_suffix = now.strftime("%Y-%m-%d-%H%M")
+    now: datetime = datetime.now()
+    date_suffix: str = now.strftime("%Y-%m-%d-%H%M")
     return date_suffix
 
 
@@ -24,9 +24,10 @@ def import_config() -> dict:
         return config
     except FileNotFoundError:
         print("Could not find config file.")
+        raise
 
 
-def iterate_configs(date_time: datetime, config: dict) -> list:
+def iterate_configs(date_time: str, config: dict) -> list:
     """Iterate over all the subvolumes in the config file, then call\
     create_snapshot.
 
@@ -40,7 +41,7 @@ def iterate_configs(date_time: datetime, config: dict) -> list:
     return return_list
 
 
-def create_snapshot(date_suffix: datetime, subvol: str, backup_location: str):
+def create_snapshot(date_suffix: str, subvol: str, backup_location: str):
     """Create a btrfs snapshot.
 
     :param date_suffix: a datetime object formatted to be the name of the snapshot
