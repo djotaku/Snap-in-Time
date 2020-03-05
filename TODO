@@ -3,12 +3,6 @@ Overhaul notes:
 Use what have learned recently:
 
 -functional programming for easy unit testing - each should only be doing one thing (and should probably take arguments
--make a package
--pytest unit tests from the beginning
--mypy/static testing from beginning
--flake8
--Github CI
--setup.py and setup.cfg for Python package
 -use config files rather than hard-coding
 JSON file where each subvol has attributes: 
 Subvol

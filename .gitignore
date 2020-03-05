@@ -1,2 +1,6 @@
 *.kdev
 *.pyc
+bin/*
+lib/*
+include/*
+lib64/*
