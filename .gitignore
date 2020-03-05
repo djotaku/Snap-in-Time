@@ -7,5 +7,7 @@ lib64/*
 docs/_build/*
 htmlcov/*
 lib64
-*.egg
+*.egg*
 */.mypy_cache/*
+pyenv.cfg
+*.coverage
