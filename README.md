@@ -1,6 +1,8 @@
 Snap-in-Time
 ============
 
+![Lint,PyTest, MyPy, and Coverage](https://github.com/djotaku/Snap-in-Time/workflows/Lint,PyTest,%20MyPy,%20and%20Coverage/badge.svg) [![codecov](https://codecov.io/gh/djotaku/Snap-in-Time/branch/master/graph/badge.svg)](https://codecov.io/gh/djotaku/Snap-in-Time)
+
 script for btrfs backups to create hourly snapshots & backups and cull the snapshots & backups.
 
 The script should be added to root's cron job (or the user, but to really work correctly should have the sudoers file edited to let this script run without a password) running hourly.
