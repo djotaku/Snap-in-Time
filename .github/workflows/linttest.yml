@@ -35,3 +35,7 @@ jobs:
       run: |
         pip install mypy
         mypy snapintime/create_local_snapshots.py snapintime/utils/date.py
+    - name: CodeCov
+      run: |
+        pip install codecov
+        codecov --token=secrets.CODECOV_TOKEN
