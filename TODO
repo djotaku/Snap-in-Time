@@ -9,13 +9,9 @@ Subvol
 Backup location
 Remote location
 -instead of one massive, headache-inducing file - split it up into lots of submodules
-create_local_snapshots - create local snapshots
 Local_culling - thin the local snapshots
 Push_remote - needs to grab remote snapshots and determine newest one, needs to determine newest snapshot on remote, try a send to remote, verify that send worked
 Maybe current snapintime.py (rename to snap_in_time.py) pulls it all together. If use arguments, use argparse
-
-For subprocess - look at the documentation because I was using it naively, and it may be possible that it can let me know if things didn’t work and why - for presenting to user, making decisions on whether to continue, mailing out error status?
-
 ====
 For utils/time:
 
@@ -33,3 +29,31 @@ Go back 7 days -> cull to 1 for that day
 Go back to previous month -> cull to one per 7 days (29-31 will not be culled, but will be caught on the quarterly one; also allows me to cheat since every month has AT LEAST 28 days)
 Go back to previous quarter -> cull to one per month
 Go back to previous year -> cull to one per quarter
+
+=========
+
+6 March import:
+
+For culling: use sorted(glob result)
+
+Is glob the best option for getting the snaps?
+
+For remote backup:
+Use ssh to run glob on remote
+Use sorted to find last subvol backup
+Make sure that subvol is on local. If not, go to next newest one...and so on until you find a match or error out.
+For JSON add attribute -> “remote” which is True/False
+
+For unit testing, especially for get_date_time(), probably want to use patch from unittest.mock
+
+Dev steps:
+Full Code coverage on current code (pytest all or ignore line - like w/ if __name__ == __main__
+Fix up docs and setup Readthedocs.io
+Automate version in docs/setup.py
+Requirements.txt with sphinx 2.2
+Merge overhaul into master
+Fix setup.[py|cfg] and setup PyPi upload from GH CI
+Remote backup code / unit tests
+If not already done, get code coverage back to 100%
+Local Culling / unit tests
+If not already done, get code coverage back to 100%

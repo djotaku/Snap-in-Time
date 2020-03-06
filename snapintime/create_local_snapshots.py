@@ -64,5 +64,5 @@ def main():
         print(f"Result was: {str(result['Output'])}\n")
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     main()
