@@ -1,5 +1,6 @@
 """Load the config file."""
 
+import json
 import xdgenvpy  # type: ignore
 
 

@@ -1,7 +1,6 @@
 """Read in configuration file and create local snapshots."""
 
 from datetime import datetime
-import json
 import subprocess
 
 from snapintime.utils import config as config
