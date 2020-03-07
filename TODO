@@ -48,9 +48,6 @@ For unit testing, especially for get_date_time(), probably want to use patch fro
 
 Dev steps:
 Full Code coverage on current code (pytest all or ignore line - like w/ if __name__ == __main__
-Fix up docs and setup Readthedocs.io
-Automate version in docs/setup.py
-Requirements.txt with sphinx 2.2
 Merge overhaul into master
 Fix setup.[py|cfg] and setup PyPi upload from GH CI
 Remote backup code / unit tests
