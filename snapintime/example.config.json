@@ -1,0 +1,13 @@
+{   "0":
+    { "subvol": "/home",
+    "backuplocation": "/home/.snapshot"
+    },
+    "1":
+    { "subvol": "/media/Photos",
+    "backuplocation": "/media/Photos/.Snapshots"
+    },
+    "2":
+    { "subvol": "/media/Archive",
+    "backuplocation": "/media/NotHome/Snapshots/Archive"
+    }
+}
