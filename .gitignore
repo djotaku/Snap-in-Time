@@ -11,3 +11,4 @@ lib64
 */.mypy_cache/*
 pyvenv.cfg
 *.coverage
+*/*.mypy_cache/*
