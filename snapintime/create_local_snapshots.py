@@ -3,7 +3,7 @@
 from datetime import datetime
 import subprocess
 
-from snapintime.utils import config as config
+from snapintime.utils import config as config  # type: ignore
 
 
 def get_date_time() -> str:

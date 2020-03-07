@@ -2,6 +2,8 @@
 
 import subprocess
 
+from snapintime.utils import config as config  # type: ignore
+
 
 def get_remote_latest_subvol(remote_location: str, remote_subvol_dir: str) -> str:
     """This function assumes user has set up ssh keys for paswordless login.
@@ -19,7 +21,8 @@ def get_remote_latest_subvol(remote_location: str, remote_subvol_dir: str) -> st
 
 
 def main():  # pragma: no
-    results = get_remote_latest_subvol("", "")
+    our_config = config.import_config()
+    results = get_remote_latest_subvol(our_config["0"].get('remote_location'), our_config["0"].get('remote_subvol_dir'))
     print(results)
 
 
