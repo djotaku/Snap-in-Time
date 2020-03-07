@@ -20,11 +20,11 @@ def get_remote_latest_subvol(remote_location: str, remote_subvol_dir: str) -> st
     return sorted_subvols[-1]
 
 
-def main():  # pragma: no
+def main():  # pragma: no cover
     our_config = config.import_config()
     results = get_remote_latest_subvol(our_config["0"].get('remote_location'), our_config["0"].get('remote_subvol_dir'))
     print(results)
 
 
-if __name__ == "__main__":  # pragma: no
+if __name__ == "__main__":  # pragma: no cover
     main()
