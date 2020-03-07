@@ -16,6 +16,7 @@ At this point in time it creates snapshots and can btrfs send/receive to a remot
    :caption: Contents:
    
    usage
+   config
    modules/create_local_snapshots
    modules/remote_backup
 
