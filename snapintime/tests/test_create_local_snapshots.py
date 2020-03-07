@@ -1,6 +1,7 @@
 """Test ability to create local snapshots."""
 
 from datetime import datetime
+import subprocess
 from unittest import mock
 
 from snapintime import create_local_snapshots
@@ -21,5 +22,9 @@ def test_iterate_configs():
     pass
 
 
-def test_create_snapshot():
-    pass
+@mock.patch('snapintime.create_local_snapshots.subprocess')
+def test_create_snapshot(subprocess_mock):
+    subprocess_done = subprocess.CompletedProcess(args="args", returncode=0, stdout="stdout")
+    subprocess_mock.run.return_value = subprocess_done
+    result = create_local_snapshots.create_snapshot("2020-01-01-1233", "subvol", "backuplocation")
+    assert result == {"Command": "args", "Return Code": 0, "Output": "stdout"}
