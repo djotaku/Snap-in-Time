@@ -13,4 +13,5 @@ six==1.14.0
 typed-ast==1.4.1
 typing-extensions==3.7.4.1
 wcwidth==0.1.8
+xdgenvpy==2.2.2
 zipp==3.1.0
