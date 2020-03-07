@@ -70,7 +70,7 @@ def btrfs_send_receive(local_subvols: list, remote_subvol: str, backup_location:
         result = {"Command": raw_result.args, "Return Code": raw_result.returncode, "Output": raw_result.stdout}
         return result
     except subprocess.SubprocessError as e:
-        error_result = {"Command": e.args, "Return Code": e.returncode, "Output": e.stderr}
+        error_result = {"Command": e.args, "Return Code": e.returncode, "Output": e.stderr}  # type: no
         return error_result
 
 
