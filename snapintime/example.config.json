@@ -1,7 +1,7 @@
 {   "0":
     { "subvol": "/home",
     "backuplocation": "/home/.snapshot",
-    "remote": True,
+    "remote": "True",
     "remote_location": "user@server",
     "remote_subvol_dir": "/media/backups"
     },

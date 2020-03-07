@@ -3,7 +3,7 @@
 from datetime import datetime
 import subprocess
 
-from snapintime.utils import config as config
+from snapintime.utils import config as config  # type: ignore
 
 
 def get_date_time() -> str:
@@ -19,7 +19,8 @@ def iterate_configs(date_time: str, config: dict) -> list:
 
     :param date_time: The date time that will end up as the btrfs snapshot name
     :param config: The config file, parsed by import_config.
-    :returns: A list containing return values from create_snapshot"""
+    :returns: A list containing return values from create_snapshot
+    """
     return_list = []
     for subvol in config.values():
         return_list.append(create_snapshot(date_time, subvol.get("subvol"),
