@@ -3,6 +3,7 @@
 from datetime import datetime
 import json
 import subprocess
+import xdgenvpy
 
 
 def get_date_time() -> str:
@@ -18,8 +19,9 @@ def import_config() -> dict:
     :returns: A dictionary containing configs
     :raises: FileNotFoundError
     """
+    xdg = xdgenvpy.XDGPedanticPackage('snapintime')
     try:
-        with open("config.json") as file:
+        with open(f"{xdg.XDG_CONFIG_HOME}/config.json") as file:
             config = json.load(file)
         return config
     except FileNotFoundError:
