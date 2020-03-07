@@ -10,7 +10,7 @@ snapintime is meant to manage the creation, culling, and send to a remote locati
 
 At this point in time it just creates snapshots.
 
-Edit config.json (from the Github repo: https://github.com/djotaku/Snap-in-Time).
+Grab config.json from the Github repo (https://github.com/djotaku/Snap-in-Time), edit it, and place it in $HOME/.config/snapintime
 
 Then run python -m snapintime.create_local_snapshots
 
