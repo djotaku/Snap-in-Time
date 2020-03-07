@@ -49,7 +49,7 @@ For unit testing, especially for get_date_time(), probably want to use patch fro
 Dev steps:
 Full Code coverage on current code (pytest all or ignore line - like w/ if __name__ == __main__
 Merge overhaul into master
-Fix setup.[py|cfg] and setup PyPi upload from GH CI
+Setup PyPi upload from GH CI
 Remote backup code / unit tests
 If not already done, get code coverage back to 100%
 Local Culling / unit tests
