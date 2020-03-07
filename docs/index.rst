@@ -27,6 +27,7 @@ If running from PyPi, run python -m snapintime.create_local_snapshots
    :caption: Contents:
    
    modules/create_local_snapshots
+   modules/remote_backup
 
 
 

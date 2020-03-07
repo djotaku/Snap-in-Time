@@ -1,9 +1,9 @@
 """Read in configuration file and create local snapshots."""
 
 from datetime import datetime
-import json
 import subprocess
-import xdgenvpy  # type: ignore
+
+from snapintime.utils import config as config
 
 
 def get_date_time() -> str:
@@ -11,22 +11,6 @@ def get_date_time() -> str:
     now: datetime = datetime.now()
     date_suffix: str = now.strftime("%Y-%m-%d-%H%M")
     return date_suffix
-
-
-def import_config() -> dict:
-    """Import config file.
-
-    :returns: A dictionary containing configs
-    :raises: FileNotFoundError
-    """
-    xdg = xdgenvpy.XDGPedanticPackage('snapintime')
-    try:
-        with open(f"{xdg.XDG_CONFIG_HOME}/config.json") as file:
-            config = json.load(file)
-        return config
-    except FileNotFoundError:
-        print("Could not find config file.")
-        raise
 
 
 def iterate_configs(date_time: str, config: dict) -> list:
@@ -59,8 +43,8 @@ def create_snapshot(date_suffix: str, subvol: str, backup_location: str):
 
 def main():  # pragma: no cover
     date_time_for_backup = get_date_time()
-    config = import_config()
-    results = iterate_configs(date_time_for_backup, config)
+    our_config = config.import_config()
+    results = iterate_configs(date_time_for_backup, our_config)
     for result in results:
         print(f"\nRan {result['Command']} with a return code of {result['Return Code']}")
         print(f"Result was: {str(result['Output'])}\n")
