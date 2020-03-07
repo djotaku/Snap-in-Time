@@ -3,7 +3,7 @@
 from datetime import datetime
 import json
 import subprocess
-import xdgenvpy
+import xdgenvpy  # type: ignore
 
 
 def get_date_time() -> str:
