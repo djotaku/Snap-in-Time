@@ -22,9 +22,9 @@ jobs:
       run: |
         pip install flake8
         # stop the build if there are Python syntax errors or undefined names
-        flake8 snapintime/create_local_snapshots.py snapintime/remote_backup.py snapintime/utils/* --count --select=E9,F63,F7,F82 --show-source --statistics 
+        flake8 snapintime/create_local_snapshots.py snapintime/remote_backup.py snapintime/utils/*.py --count --select=E9,F63,F7,F82 --show-source --statistics 
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 snapintime/create_local_snapshots.py snapintime/remote_backup.py snapintime/utils/*  --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics 
+        flake8 snapintime/create_local_snapshots.py snapintime/remote_backup.py snapintime/utils/*.py  --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics 
       shell: bash
     - name: Test with pytest
       run: |
@@ -34,7 +34,7 @@ jobs:
     - name: Check with MyPy
       run: |
         pip install mypy
-        mypy snapintime/* snapintime/utils/*
+        mypy snapintime/*.py snapintime/utils/*.py
     - name: CodeCov
       run: |
         pip install codecov
