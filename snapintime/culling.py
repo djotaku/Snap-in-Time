@@ -4,6 +4,7 @@ from datetime import datetime
 import itertools
 import os
 import re
+import subprocess
 
 from snapintime.utils import config as config  # type: ignore
 import snapintime.utils.date  # type: ignore
@@ -65,8 +66,23 @@ def get_subvols_by_date(directory: str, reg_ex) -> list:
     return return_list
 
 
-def btrfs_del(subvols: list):
-    pass
+def btrfs_del(directory: str, subvols: list):
+    return_list = []
+    if len(subvols) > 0:
+        for subvol in subvols:
+            command = f"btrfs sub del {directory}/{subvol}"
+            try:
+                raw_result = subprocess.run(command, capture_output=True, shell=True, check=True, text=True)
+                return_text = f"Ran {raw_result.args} with a return code of {raw_result.returncode}.\n"\
+                    f"Result was {str(raw_result.stdout)}"
+                return_list.append(return_text)
+            except subprocess.SubprocessError as e:
+                error_text = f"Ran {e.args} with a return code of {e.returncode}.\n"\
+                    f"Result was {str(e.stderr)}"
+                return_list.append(error_text)
+    else:
+        return_list = ["There was either only one or no subvolumes at that date"]
+    return return_list
 
 
 def main():  # pragma: no cover
@@ -75,7 +91,7 @@ def main():  # pragma: no cover
     three_days_ago_reg_ex = re.compile(three_days_ago)
     subvols_three_days_ago = get_subvols_by_date("/home/.snapshot", three_days_ago_reg_ex)
     three_days_ago_culled = daily_cull(subvols_three_days_ago)
-    result = btrfs_del(three_days_ago)
+    result = btrfs_del("/home/.snapshot", three_days_ago_culled)
     # grab dir <- universal
     # regex to date we want to cull <- universal
     # call daily_cull <- only for daily_cull
