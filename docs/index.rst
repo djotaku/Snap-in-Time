@@ -20,6 +20,8 @@ At this point in time it creates snapshots and can btrfs send/receive to a remot
    modules/create_local_snapshots
    modules/culling
    modules/remote_backup
+   modules/utils/config
+   modules/utils/date
 
 
 
