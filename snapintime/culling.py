@@ -1,7 +1,12 @@
 """Thin out the snapshots on disk."""
 
+from datetime import datetime
 import itertools
+import os
 import re
+
+from snapintime.utils import config as config  # type: ignore
+import snapintime.utils.date  # type: ignore
 
 
 def split_dir_hours(subvols: list, reg_ex) -> list:
@@ -43,9 +48,39 @@ def daily_cull(dir_to_cull: list) -> list:
     return list(itertools.chain.from_iterable(fourths_list))
 
 
+def get_subvols_by_date(directory: str, reg_ex) -> list:
+    """Return a list based on matching regular expression.
+
+    This is meant to produce the list that will be the input for one of the culling functions.
+
+    :param directory: The directory we want to grab subvols from.
+    :param reg_ex: A regular expression to apply to the directory contents.
+    :returns: A list of subvolumes for culling.
+    """
+    subvols = os.listdir(path=directory)
+    return_list = []
+    for subvol in subvols:
+        if reg_ex.search(subvol) is not None:
+            return_list.append(subvol)
+    return return_list
+
+
+def btrfs_del(subvols: list):
+    pass
+
+
 def main():  # pragma: no cover
-    hourly_dir_to_cull = ["2020-03-01-0000", "2020-03-01-0100", "2020-03-01-0200", "2020-03-01-0300", "2020-03-01-0400", "2020-03-01-0500", "2020-03-01-0600", "2020-03-01-0700", "2020-03-01-0800", "2020-03-01-0900", "2020-03-01-1000", "2020-03-01-1100", "2020-03-01-1200", "2020-03-01-1300", "2020-03-01-1400", "2020-03-01-1500", "2020-03-01-1600", "2020-03-01-1700", "2020-03-01-1800", "2020-03-01-1900", "2020-03-01-2000", "2020-03-01-2100", "2020-03-01-2200", "2020-03-01-2300"]
-    print(daily_cull(hourly_dir_to_cull))
+    our_config = config.import_config()
+    three_days_ago: str = snapintime.utils.date.prior_date(datetime.now(), 3).strftime("%Y-%m-%d")  # <- only for daily_cull
+    three_days_ago_reg_ex = re.compile(three_days_ago)
+    subvols_three_days_ago = get_subvols_by_date("/home/.snapshot", three_days_ago_reg_ex)
+    three_days_ago_culled = daily_cull(subvols_three_days_ago)
+    result = btrfs_del(three_days_ago)
+    # grab dir <- universal
+    # regex to date we want to cull <- universal
+    # call daily_cull <- only for daily_cull
+    # take those results and, if not emtpy list, btrfs del the list <- universal
+    print(result)
 
 
 if __name__ == "__main__":  # pragma: no cover
