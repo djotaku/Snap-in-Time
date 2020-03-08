@@ -36,15 +36,6 @@ Go back to previous year -> cull to one per quarter
 
 For culling: use sorted(glob result)
 
-Is glob the best option for getting the snaps?
-
-For remote backup:
-Use ssh to run glob on remote
-Use sorted to find last subvol backup
-Make sure that subvol is on local. If not, go to next newest one...and so on until you find a match or error out.
-For JSON add attribute -> “remote” which is True/False
-
-For unit testing, especially for get_date_time(), probably want to use patch from unittest.mock
 
 Dev steps:
 Full Code coverage on current code (pytest all or ignore line - like w/ if __name__ == __main__

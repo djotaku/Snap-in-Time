@@ -8,7 +8,7 @@ from snapintime.utils import config as config  # type: ignore
 
 def get_remote_subvols(remote_location: str, remote_subvol_dir: str) -> list:
     """Retrieve the remote subvolumes.
-    
+
     This function assumes user has set up ssh keys for paswordless login.
 
     :param remote_location: This should be a string like user@computer or\
