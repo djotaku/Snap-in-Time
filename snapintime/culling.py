@@ -85,7 +85,7 @@ def btrfs_del(directory: str, subvols: list) -> list:
                 return_list.append(return_text)
             except subprocess.SubprocessError as e:
                 error_text = f"Ran {e.args} with a return code of {e.returncode}.\n"\
-                    f"Result was {str(e.stderr)}"
+                    f"Result was {str(e.stderr)}"  # type: ignore
                 return_list.append(error_text)
     else:
         return_list = ["There was either only one or no subvolumes at that date"]
