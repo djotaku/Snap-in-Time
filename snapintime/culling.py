@@ -66,7 +66,14 @@ def get_subvols_by_date(directory: str, reg_ex) -> list:
     return return_list
 
 
-def btrfs_del(directory: str, subvols: list):
+def btrfs_del(directory: str, subvols: list) -> list:
+    """Delete subvolumes in a given directory.
+
+    :param directory: The directory holding the subvolumes.
+    :param subvols: A list of subvolumes to delete
+    :returns: A list with the commands run and the results or, if there weren't any subvolumes\
+    to delete, returns a message with that information.
+    """
     return_list = []
     if len(subvols) > 0:
         for subvol in subvols:
@@ -85,18 +92,30 @@ def btrfs_del(directory: str, subvols: list):
     return return_list
 
 
+def cull_three_days_ago(config: dict) -> list:
+    """Cull the btrfs snapshots from 3 days ago.
+
+    :param config: The configuration file.
+    :returns: A list containing the results of running the commands.
+    """
+    three_days_ago: str = snapintime.utils.date.prior_date(datetime.now(), 3).strftime("%Y-%m-%d")
+    three_days_ago_reg_ex = re.compile(three_days_ago)
+    return_list = []
+    for subvol in config.values():
+        subvols_three_days_ago = get_subvols_by_date(subvol.get("backuplocation"), three_days_ago_reg_ex)
+        three_days_ago_culled = daily_cull(subvols_three_days_ago)
+        return_list.append(btrfs_del(subvol.get("backuplocation"), three_days_ago_culled))
+    return return_list
+
+
 def main():  # pragma: no cover
     our_config = config.import_config()
-    three_days_ago: str = snapintime.utils.date.prior_date(datetime.now(), 3).strftime("%Y-%m-%d")  # <- only for daily_cull
-    three_days_ago_reg_ex = re.compile(three_days_ago)
-    subvols_three_days_ago = get_subvols_by_date("/home/.snapshot", three_days_ago_reg_ex)
-    three_days_ago_culled = daily_cull(subvols_three_days_ago)
-    result = btrfs_del("/home/.snapshot", three_days_ago_culled)
+    three_day_cull_result = cull_three_days_ago(our_config)
+    print(three_day_cull_result)
     # grab dir <- universal
     # regex to date we want to cull <- universal
     # call daily_cull <- only for daily_cull
     # take those results and, if not emtpy list, btrfs del the list <- universal
-    print(result)
 
 
 if __name__ == "__main__":  # pragma: no cover
