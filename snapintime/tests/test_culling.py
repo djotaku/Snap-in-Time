@@ -23,4 +23,14 @@ def test_cull_hours_irregular_hours():
     results = culling.daily_cull(hourly_dir_to_cull)
     assert results == ["2020-03-01-0200", "2020-03-01-0300", "2020-03-01-0400", "2020-03-01-0500", "2020-03-01-0700", "2020-03-01-0800", "2020-03-01-1000", "2020-03-01-1100", "2020-03-01-1300", "2020-03-01-1400", "2020-03-01-1500", "2020-03-01-1600", "2020-03-01-1700", "2020-03-01-2300"]
 
-# thigns we still need to test for cull hours: what if there's only one item on the list. What if it's an empty list?
+
+def test_cull_hours_only_one_entry():
+    hourly_dir_to_cull = ["2020-03-01-0100"]
+    results = culling.daily_cull(hourly_dir_to_cull)
+    assert results == []
+
+
+def test_cull_hours_no_entries():
+    hourly_dir_to_cull = []
+    results = culling.daily_cull(hourly_dir_to_cull)
+    assert results == []
