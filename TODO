@@ -34,9 +34,6 @@ Go back to previous year -> cull to one per quarter
 
 6 March import:
 
-For culling: use sorted(glob result)
-
-
 Dev steps:
 Full Code coverage on current code (pytest all or ignore line - like w/ if __name__ == __main__
 Local Culling / unit tests
