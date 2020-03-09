@@ -4,7 +4,7 @@ config.json
 
 An example of the config.json file:
 
-.. code::JSON
+.. code:: JSON
 
     {   "0":
     { "subvol": "/home",
