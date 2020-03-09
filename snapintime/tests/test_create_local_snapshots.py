@@ -14,10 +14,6 @@ def test_correct_date_time(datetime_mock):
     assert time_to_test == "2020-01-01-1233"
 
 
-def test_import_config():
-    pass
-
-
 def test_iterate_configs():
     pass
 

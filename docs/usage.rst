@@ -42,3 +42,23 @@ This code makes the assumption that you have setup ssh keys to allow you to ssh 
    python remote_backup.py
 
 If running from PyPi, run: python -m snapintime.remote_backup
+
+Culling Local Snapshots
+^^^^^^^^^^^^^^^^^^^^^^^
+
+The culling follows the following specification:
+
+- Three days ago: Leave at most 4 snapshots behind - closest snapshots to 0000, 0600, 1200, and 1800. (implemented)
+- Seven days ago: Leave at most 1 snapshot behind - the last one that day. In a perfect situation, it would be the one taken at 1800.
+- After a quarter (defined as 13 weeks) - Leave at most 1 snapshot per week.
+- After a year (52 weeks) - Leave at most 1 snapshot per quarter
+
+I recommend running culling submodule AFTER remote backup (if you're doing the remote backups). This is to prevent the removal of the subvol you'd use for the btrfs send/receive. If your computer is constantly on without interruption, it shouldn't be an issue if you're doing your remote backups daily. And why wouldn't you? The smaller the diff betwen the last backup and this one, the less data you have to send over the network. So it's more of a precaution in case you turn it off for a while on vacation or the computer breaks for a while and can't do the backups.
+
+.. code::Bash
+   
+   pip -r requirements.txt 
+   cd snapintime
+   python culling.py
+
+If running from PyPi, run: python -m snapintime.culling
