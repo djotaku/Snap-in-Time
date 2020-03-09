@@ -77,7 +77,7 @@ def btrfs_del(directory: str, subvols: list) -> list:
     return_list = []
     if len(subvols) > 0:
         for subvol in subvols:
-            command = f"btrfs sub del {directory}/{subvol}"
+            command = f"/usr/sbin/btrfs sub del {directory}/{subvol}"
             try:
                 raw_result = subprocess.run(command, capture_output=True, shell=True, check=True, text=True)
                 return_text = f"Ran {raw_result.args} with a return code of {raw_result.returncode}.\n"\

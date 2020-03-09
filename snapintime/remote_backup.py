@@ -64,7 +64,7 @@ def btrfs_send_receive(local_subvols: list, remote_subvol: str, backup_location:
     :returns: A dictionary with the result of the command.
     """
     sorted_local = sorted(local_subvols)
-    command = f"btrfs send -p {backup_location}/{remote_subvol} {backup_location}/{sorted_local[-1]} | ssh {remote_location} btrfs receive {remote_subvol_dir}"
+    command = f"/usr/sbin/btrfs send -p {backup_location}/{remote_subvol} {backup_location}/{sorted_local[-1]} | ssh {remote_location} btrfs receive {remote_subvol_dir}"
     try:
         raw_result = subprocess.run(command, capture_output=True, shell=True, check=True, text=True)
         result = {"Command": raw_result.args, "Return Code": raw_result.returncode, "Output": raw_result.stdout}
