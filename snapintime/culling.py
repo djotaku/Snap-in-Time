@@ -110,7 +110,8 @@ def cull_three_days_ago(config: dict) -> list:
 def main():  # pragma: no cover
     our_config = config.import_config()
     three_day_cull_result = cull_three_days_ago(our_config)
-    print(three_day_cull_result)
+    for result in three_day_cull_result:
+        print(result)
     # grab dir <- universal
     # regex to date we want to cull <- universal
     # call daily_cull <- only for daily_cull
