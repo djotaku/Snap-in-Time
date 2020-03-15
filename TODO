@@ -1,17 +1,4 @@
 Overhaul notes: 
-
-Use what have learned recently:
-
--functional programming for easy unit testing - each should only be doing one thing (and should probably take arguments
--use config files rather than hard-coding
-JSON file where each subvol has attributes: 
-Subvol
-Backup location
-Remote location
--instead of one massive, headache-inducing file - split it up into lots of submodules
-Local_culling - thin the local snapshots
-Push_remote - needs to grab remote snapshots and determine newest one, needs to determine newest snapshot on remote, try a send to remote, verify that send worked
-Maybe current snapintime.py (rename to snap_in_time.py) pulls it all together. If use arguments, use argparse
 ====
 For utils/time:
 
