@@ -84,7 +84,7 @@ def btrfs_del(directory: str, subvols: list) -> list:
                     f"Result was {str(raw_result.stdout)}"
                 return_list.append(return_text)
             except subprocess.SubprocessError as e:
-                error_text = f"Ran {e.args} with a return code of {e.returncode}.\n Result was {str(e.stderr)}"  # type: ignore
+                error_text = f"Ran {e.args[1]} with a return code of {e.returncode}.\nResult was {str(e.stderr)}"  # type: ignore
                 return_list.append(error_text)
     else:
         return_list = ["There was either only one or no subvolumes at that date"]
@@ -107,11 +107,54 @@ def cull_three_days_ago(config: dict) -> list:
     return return_list
 
 
+def weekly_cull(dir_to_cull: list) -> list:
+    """Take a list of snapshots from a directory (already reduced to one day) and cull.
+
+        This culling will return a list with the snapshots to remove for the given day.
+
+        For a perfect set of snapshots, (where the user has been doing one snapshot per hour and \
+        doing the daily culling) it should leave behind (remove from list):
+
+        - day1-1800
+
+        :param dir_to_cull: A list containing snapshots. Assumes another function\
+        has already reduced this list to a list containing only one day's worth of\
+        snapshots.
+        :returns: A list containing all the subvolumes to cull.
+        """
+    sorted_dir_to_cull = sorted(dir_to_cull)
+    sorted_dir_to_cull.pop()
+    return sorted_dir_to_cull
+
+
+def cull_seven_days_ago(config: dict) -> list:
+    """Cull the btrfs snapshots from 7 days ago.
+
+    :param config: The configuration file.
+    :returns: A list containing the results of running the commands.
+    """
+    seven_days_ago: str = snapintime.utils.date.prior_date(datetime.now(), 7).strftime("%Y-%m-%d")
+    seven_days_ago_reg_ex = re.compile(seven_days_ago)
+    return_list = []
+    for subvol in config.values():
+        subvols_seven_days_ago = get_subvols_by_date(subvol.get("backuplocation"), seven_days_ago_reg_ex)
+        seven_days_ago_culled = weekly_cull(subvols_seven_days_ago)
+        return_list.append(btrfs_del(subvol.get("backuplocation"), seven_days_ago_culled))
+    return return_list
+
+
+def print_output(list_of_lists: list):  # pragma: no cover
+    for directory in list_of_lists:
+        for result in directory:
+            print(result)
+
+
 def main():  # pragma: no cover
     our_config = config.import_config()
     three_day_cull_result = cull_three_days_ago(our_config)
-    for result in three_day_cull_result:
-        print(result)
+    print_output(three_day_cull_result)
+    seven_day_cull_result = cull_seven_days_ago(our_config)
+    print_output(seven_day_cull_result)
     # grab dir <- universal
     # regex to date we want to cull <- universal
     # call daily_cull <- only for daily_cull

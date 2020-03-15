@@ -1,17 +1,4 @@
 Overhaul notes: 
-
-Use what have learned recently:
-
--functional programming for easy unit testing - each should only be doing one thing (and should probably take arguments
--use config files rather than hard-coding
-JSON file where each subvol has attributes: 
-Subvol
-Backup location
-Remote location
--instead of one massive, headache-inducing file - split it up into lots of submodules
-Local_culling - thin the local snapshots
-Push_remote - needs to grab remote snapshots and determine newest one, needs to determine newest snapshot on remote, try a send to remote, verify that send worked
-Maybe current snapintime.py (rename to snap_in_time.py) pulls it all together. If use arguments, use argparse
 ====
 For utils/time:
 
@@ -24,10 +11,9 @@ Culling
 New naive coding: This is for someone who has their computer always on. Since btrfs snaps are relatively cheap, just don’t care if the computer is off for a day or a week - if you have a few extra ones they’ll be eventually cleaned up by the Monthly/Quarterly/Yearly culls
 
 Easy ones:
-Go back 3 days -> cull to 4 hourly on that day
-Go back 7 days -> cull to 1 for that day
-Go back to previous month -> cull to one per 7 days (29-31 will not be culled, but will be caught on the quarterly one; also allows me to cheat since every month has AT LEAST 28 days)
-Go back to previous quarter -> cull to one per month
+Go back 3 days -> cull to 4 hourly on that day (done)
+Go back 7 days -> cull to 1 for that day (done)
+Go back to previous quarter -> cull to one per week
 Go back to previous year -> cull to one per quarter
 
 =========

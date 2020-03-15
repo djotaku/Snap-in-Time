@@ -5,7 +5,7 @@ As of version 0.8.0, it creates snapshots, culls local snapshots three days old,
 Culling:
 
 - Three days ago: Leave at most 4 snapshots behind - closest snapshots to 0000, 0600, 1200, and 1800. (implemented)
-- Seven days ago: Leave at most 1 snapshot behind - the last one that day. In a perfect situation, it would be the one taken at 1800.
+- Seven days ago: Leave at most 1 snapshot behind - the last one that day. In a perfect situation, it would be the one taken at 1800. (implemented)
 - After a quarter (defined as 13 weeks) - Leave at most 1 snapshot per week.
 - After a year (52 weeks) - Leave at most 1 snapshot per quarter
 
