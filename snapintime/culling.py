@@ -123,7 +123,8 @@ def weekly_cull(dir_to_cull: list) -> list:
         :returns: A list containing all the subvolumes to cull.
         """
     sorted_dir_to_cull = sorted(dir_to_cull)
-    sorted_dir_to_cull.pop()
+    if len(sorted_dir_to_cull) != 0:
+        sorted_dir_to_cull.pop()
     return sorted_dir_to_cull
 
 
