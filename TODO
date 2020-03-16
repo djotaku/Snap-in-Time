@@ -21,6 +21,7 @@ Go back to previous year -> cull to one per quarter
 6 March import:
 
 Dev steps:
-Full Code coverage on current code (pytest all or ignore line - like w/ if __name__ == __main__
 Local Culling / unit tests
 If not already done, get code coverage back to 100%
+---
+15 March: may want to test print_output and/or other parts of culling to make sure things still work correctly if there's only one subvol
