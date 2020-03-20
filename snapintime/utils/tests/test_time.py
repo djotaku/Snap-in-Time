@@ -25,3 +25,13 @@ def test_minus_first_day_of_year():
     today = datetime(year=2020, month=1, day=1)
     new_day = snapintime.utils.date.prior_date(today, 1)
     assert (new_day.year, new_day.month, new_day.day) == (2019, 12, 31)
+
+
+def test_3_day_range():
+    """Test getting back dates from a 3 day range."""
+    today = datetime(year=2020, month=4, day=1)
+    day1 = datetime(year=2020, month=3, day=31)
+    day2 = datetime(year=2020, month=3, day=30)
+    day3 = datetime(year=2020, month=3, day=29)
+    date_list = snapintime.utils.date.many_dates(today, 1, 3)
+    assert date_list == [day1, day2, day3]
