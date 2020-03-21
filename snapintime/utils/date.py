@@ -41,5 +41,4 @@ def quarterly_weeks(start_date: datetime) -> list:
     list_of_weeks = []
     for number in range(0, 90, 7):
         list_of_weeks.append(many_dates(start_date, 90+number, 96+number))
-    print(list_of_weeks)
     return list_of_weeks
