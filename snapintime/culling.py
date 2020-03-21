@@ -144,6 +144,54 @@ def cull_seven_days_ago(config: dict) -> list:
     return return_list
 
 
+def quarterly_cull(dir_to_cull: list) -> list:
+    """Take a list of snapshots from a directory (already reduced to one week) and cull.
+
+            This culling will return a list with the snapshots to remove for the week.
+
+            For a perfect set of snapshots, (where the user has been doing one snapshot per hour and \
+            doing the daily culling) it should leave behind (remove from list):
+
+            - day7-1800
+
+            .. note:: May end up combining with weekly cull as they essentially do the same thing.
+
+            :param dir_to_cull: A list containing snapshots. Assumes another function\
+            has already reduced this list to a list containing only one day's worth of\
+            snapshots.
+            :returns: A list containing all the subvolumes to cull.
+            """
+    sorted_dir_to_cull = sorted(dir_to_cull)
+    if len(sorted_dir_to_cull) != 0:
+        sorted_dir_to_cull.pop()
+    return sorted_dir_to_cull
+
+
+def cull_last_quarter(config: dict) -> list:
+    """Cull the btrfs snapshots from quarter.
+
+    Should leave 1 snapshot per week for 13 weeks.
+
+    :param config: The configuration file.
+    :returns: A list containing the results of running the commands.
+    """
+    last_quarter: list = snapintime.utils.date.quarterly_weeks(datetime.now())
+    #last_quarter_reg_ex = re.compile(last_quarter)
+    return_list = []
+    for subvol in config.values():
+        for week in last_quarter:
+            reg_ex_string = ""
+            for day in week:
+                reg_ex_string = reg_ex_string + f'({day.strftime("%Y-%m-%d")})|'
+            reg_ex_string_minus_final_or = reg_ex_string[:-1]
+            weekly_reg_ex = re.compile(reg_ex_string_minus_final_or)
+            subvols_this_week = get_subvols_by_date(subvol.get("backuplocation"), weekly_reg_ex)
+            if len(subvols_this_week) != 0:
+                this_week_culled = quarterly_cull(subvols_this_week)
+                return_list.append(btrfs_del(subvol.get("backuplocation"), this_week_culled))
+    return return_list
+
+
 def print_output(list_of_lists: list):  # pragma: no cover
     for directory in list_of_lists:
         for result in directory:
@@ -156,6 +204,8 @@ def main():  # pragma: no cover
     print_output(three_day_cull_result)
     seven_day_cull_result = cull_seven_days_ago(our_config)
     print_output(seven_day_cull_result)
+    quarter_cull_result = cull_last_quarter(our_config)
+    print_output(quarter_cull_result)
     # grab dir <- universal
     # regex to date we want to cull <- universal
     # call daily_cull <- only for daily_cull
