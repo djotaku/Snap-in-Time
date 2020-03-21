@@ -1,6 +1,7 @@
 snapintime is meant to manage the creation, culling, and send to a remote location of btrfs snapshots.
 
-As of version 0.8.0, it creates snapshots, culls local snapshots three days old, and can btrfs send/receive to a remote btrfs subvol.
+As of version 0.11.0, it creates snapshots, culls local snapshots three days old, a week old, and for the previous quarter.
+It can also btrfs send/receive to a remote btrfs subvol.
 
 Culling:
 
