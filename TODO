@@ -1,11 +1,5 @@
 Overhaul notes: 
 ====
-For utils/time:
-
-Function: 
-
-Other functions that make lists make of priordate call returns. (If needed. Better to do a naive cull for the monthly cull - just looking at groups of 7 days and picking the last one?)
-
 Culling
 
 New naive coding: This is for someone who has their computer always on. Since btrfs snaps are relatively cheap, just don’t care if the computer is off for a day or a week - if you have a few extra ones they’ll be eventually cleaned up by the Monthly/Quarterly/Yearly culls
@@ -13,7 +7,7 @@ New naive coding: This is for someone who has their computer always on. Since bt
 Easy ones:
 Go back 3 days -> cull to 4 hourly on that day (done)
 Go back 7 days -> cull to 1 for that day (done)
-Go back to previous quarter -> cull to one per week
+Go back to previous quarter -> cull to one per week (done)
 Go back to previous year -> cull to one per quarter
 
 =========
@@ -24,4 +18,3 @@ Dev steps:
 Local Culling / unit tests
 If not already done, get code coverage back to 100%
 ---
-15 March: may want to test print_output and/or other parts of culling to make sure things still work correctly if there's only one subvol
