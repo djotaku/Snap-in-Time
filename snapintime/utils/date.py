@@ -30,3 +30,16 @@ def many_dates(start_date: datetime, interval_start: int, interval_end: int) -> 
     for day in range(interval_start, interval_end+1):
         return_list.append(prior_date(start_date, day))
     return return_list
+
+
+def quarterly_weeks(start_date: datetime) -> list:
+    """Provide a list of 13 weekly date lists.
+
+    :param start_date: Date from which to go back a quarter.
+    :returns: A list of lists containing datetime objects.
+    """
+    list_of_weeks = []
+    for number in range(0, 90, 7):
+        list_of_weeks.append(many_dates(start_date, 90+number, 96+number))
+    print(list_of_weeks)
+    return list_of_weeks
