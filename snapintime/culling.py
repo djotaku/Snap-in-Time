@@ -42,7 +42,8 @@ def daily_cull(dir_to_cull: list) -> list:
     snapshots.
     :returns: A list containing all the subvolumes to cull.
     """
-    fourths = [re.compile('[0][0-5][0-9][0-9]$'), re.compile('[0][6-9][0-9][0-9]$|[1][0-1][0-9][0-9]$'), re.compile('[1][2-7][0-9][0-9]$'), re.compile('[1][8-9][0-9][0-9]$|[2][0-3][0-9][0-9]$')]
+    fourths = [re.compile('[0][0-5][0-9][0-9]$'), re.compile('[0][6-9][0-9][0-9]$|[1][0-1][0-9][0-9]$'),
+               re.compile('[1][2-7][0-9][0-9]$'), re.compile('[1][8-9][0-9][0-9]$|[2][0-3][0-9][0-9]$')]
     fourths_list = []
     for fourth in fourths:
         fourths_list.append(split_dir_hours(dir_to_cull, fourth)[1:])
@@ -144,10 +145,10 @@ def cull_seven_days_ago(config: dict) -> list:
     return return_list
 
 
-def quarterly_cull(dir_to_cull: list) -> list:
-    """Take a list of snapshots from a directory (already reduced to one week) and cull.
+def quarterly_yearly_cull(dir_to_cull: list) -> list:
+    """Take a list of snapshots from a directory (already reduced to one week or quarter) and cull.
 
-            This culling will return a list with the snapshots to remove for the week.
+            This culling will return a list with the snapshots to remove for the week or quarter.
 
             For a perfect set of snapshots, (where the user has been doing one snapshot per hour and \
             doing the daily culling) it should leave behind (remove from list):
@@ -157,7 +158,7 @@ def quarterly_cull(dir_to_cull: list) -> list:
             .. note:: May end up combining with weekly cull as they essentially do the same thing.
 
             :param dir_to_cull: A list containing snapshots. Assumes another function\
-            has already reduced this list to a list containing only one day's worth of\
+            has already reduced this list to a list containing only one week or quarter's worth of\
             snapshots.
             :returns: A list containing all the subvolumes to cull.
             """
@@ -176,7 +177,6 @@ def cull_last_quarter(config: dict) -> list:
     :returns: A list containing the results of running the commands.
     """
     last_quarter: list = snapintime.utils.date.quarterly_weeks(datetime.now())
-    #last_quarter_reg_ex = re.compile(last_quarter)
     return_list = []
     for subvol in config.values():
         for week in last_quarter:
@@ -187,8 +187,32 @@ def cull_last_quarter(config: dict) -> list:
             weekly_reg_ex = re.compile(reg_ex_string_minus_final_or)
             subvols_this_week = get_subvols_by_date(subvol.get("backuplocation"), weekly_reg_ex)
             if len(subvols_this_week) != 0:
-                this_week_culled = quarterly_cull(subvols_this_week)
+                this_week_culled = quarterly_yearly_cull(subvols_this_week)
                 return_list.append(btrfs_del(subvol.get("backuplocation"), this_week_culled))
+    return return_list
+
+
+def cull_last_year(config: dict) -> list:
+    """Cull the btrfs snapshots from quarter.
+
+    Should leave 1 snapshot per week for 13 weeks.
+
+    :param config: The configuration file.
+    :returns: A list containing the results of running the commands.
+    """
+    last_year: list = snapintime.utils.date.yearly_quarters(datetime.now())
+    return_list = []
+    for subvol in config.values():
+        for quarter in last_year:
+            reg_ex_string = ""
+            for day in quarter:
+                reg_ex_string = reg_ex_string + f'({day.strftime("%Y-%m-%d")})|'
+            reg_ex_string_minus_final_or = reg_ex_string[:-1]
+            quarterly_reg_ex = re.compile(reg_ex_string_minus_final_or)
+            subvols_this_quarter = get_subvols_by_date(subvol.get("backuplocation"), quarterly_reg_ex)
+            if len(subvols_this_quarter) != 0:
+                this_quarter_culled = quarterly_yearly_cull(subvols_this_quarter)
+                return_list.append(btrfs_del(subvol.get("backuplocation"), this_quarter_culled))
     return return_list
 
 
@@ -206,10 +230,8 @@ def main():  # pragma: no cover
     print_output(seven_day_cull_result)
     quarter_cull_result = cull_last_quarter(our_config)
     print_output(quarter_cull_result)
-    # grab dir <- universal
-    # regex to date we want to cull <- universal
-    # call daily_cull <- only for daily_cull
-    # take those results and, if not emtpy list, btrfs del the list <- universal
+    year_cull_result = cull_last_year(our_config)
+    print_output(year_cull_result)
 
 
 if __name__ == "__main__":  # pragma: no cover
