@@ -36,9 +36,20 @@ def quarterly_weeks(start_date: datetime) -> list:
     """Provide a list of 13 weekly date lists.
 
     :param start_date: Date from which to go back a quarter.
-    :returns: A list of lists containing datetime objects.
+    :returns: A list of lists containing datetime objects. Each sublist represents a week.
     """
     list_of_weeks = []
     for number in range(0, 90, 7):
         list_of_weeks.append(many_dates(start_date, 90+number, 96+number))
     return list_of_weeks
+
+
+def yearly_quarters(start_date: datetime) -> list:
+    """Provide a list of 4 quarterly date lists.
+
+    :param start_date: Date from which to go back a year.
+    :returns: A list of lists containing datetime objects. Each sublist represents a quarter."""
+    list_of_quarters = []
+    for number in range(0, 275, 91):
+        list_of_quarters.append(many_dates(start_date, 365+number, 455+number))
+    return list_of_quarters
