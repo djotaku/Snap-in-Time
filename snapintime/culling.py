@@ -177,7 +177,6 @@ def cull_last_quarter(config: dict) -> list:
     :returns: A list containing the results of running the commands.
     """
     last_quarter: list = snapintime.utils.date.quarterly_weeks(datetime.now())
-    #last_quarter_reg_ex = re.compile(last_quarter)
     return_list = []
     for subvol in config.values():
         for week in last_quarter:
