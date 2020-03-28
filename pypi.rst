@@ -1,3 +1,12 @@
+
+
+.. image:: https://codecov.io/gh/djotaku/Snap-in-Time/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/djotaku/Snap-in-Time
+
+.. image:: https://readthedocs.org/projects/snap-in-time/badge/?version=latest
+    :target: https://snap-in-time.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
+
 snapintime is meant to manage the creation, culling, and send to a remote location of btrfs snapshots.
 
 As of version 0.11.0, it creates snapshots, culls local snapshots three days old, a week old, and for the previous quarter.

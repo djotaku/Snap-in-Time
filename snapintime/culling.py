@@ -42,7 +42,8 @@ def daily_cull(dir_to_cull: list) -> list:
     snapshots.
     :returns: A list containing all the subvolumes to cull.
     """
-    fourths = [re.compile('[0][0-5][0-9][0-9]$'), re.compile('[0][6-9][0-9][0-9]$|[1][0-1][0-9][0-9]$'), re.compile('[1][2-7][0-9][0-9]$'), re.compile('[1][8-9][0-9][0-9]$|[2][0-3][0-9][0-9]$')]
+    fourths = [re.compile('[0][0-5][0-9][0-9]$'), re.compile('[0][6-9][0-9][0-9]$|[1][0-1][0-9][0-9]$'),
+               re.compile('[1][2-7][0-9][0-9]$'), re.compile('[1][8-9][0-9][0-9]$|[2][0-3][0-9][0-9]$')]
     fourths_list = []
     for fourth in fourths:
         fourths_list.append(split_dir_hours(dir_to_cull, fourth)[1:])
