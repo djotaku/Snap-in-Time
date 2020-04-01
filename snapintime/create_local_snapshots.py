@@ -36,10 +36,13 @@ def create_snapshot(date_suffix: str, subvol: str, backup_location: str):
     :param backup_location: The folder in which to create the snapshot
     """
     command = f"/usr/sbin/btrfs sub snap -r {subvol} {backup_location}/{date_suffix}"
-    raw_result = subprocess.run(command, capture_output=True, shell=True, check=True, text=True)
-    #  because check=True, need to do in a try, except and do something with the error
-    result = {"Command": raw_result.args, "Return Code": raw_result.returncode, "Output": raw_result.stdout}
-    return result
+    try:
+        raw_result = subprocess.run(command, capture_output=True, shell=True, check=True, text=True)
+        result = {"Command": raw_result.args, "Return Code": raw_result.returncode, "Output": raw_result.stdout}
+        return result
+    except subprocess.CalledProcessError as e:
+        error_text = f"Ran {e.args[1]} with a return code of {e.returncode}.\nResult was {str(e.stderr)}"  # type: ignore
+        return error_text
 
 
 def main():  # pragma: no cover
