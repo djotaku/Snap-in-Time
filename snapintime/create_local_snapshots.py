@@ -41,8 +41,8 @@ def create_snapshot(date_suffix: str, subvol: str, backup_location: str):
         result = {"Command": raw_result.args, "Return Code": raw_result.returncode, "Output": raw_result.stdout}
         return result
     except subprocess.CalledProcessError as e:
-        error_text = f"Ran {e.args[1]} with a return code of {e.returncode}.\nResult was {str(e.stderr)}"  # type: ignore
-        return error_text
+        error_result = {"Command": e.args[1], "Return Code": {e.returncode}, "Output": str(e.stderr)}
+        return error_result
 
 
 def main():  # pragma: no cover
