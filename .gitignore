@@ -12,3 +12,5 @@ lib64
 pyvenv.cfg
 *.coverage
 */*.mypy_cache/*
+.idea/
+snapintime/utils/.mypy_cache/
