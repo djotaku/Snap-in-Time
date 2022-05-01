@@ -17,11 +17,7 @@ def split_dir_hours(subvols: list, reg_ex) -> list:
     :param reg_ex: A re object defining the regular expression to evaluate against.
     :returns: A list that has only the items that passed the regular expression.
     """
-    return_list = []
-    for subvol in subvols:
-        if reg_ex.search(subvol) is not None:
-            return_list.append(subvol)
-    return return_list
+    return [subvol for subvol in subvols if reg_ex.search(subvol) is not None]
 
 
 def daily_cull(dir_to_cull: list) -> list:
@@ -44,9 +40,7 @@ def daily_cull(dir_to_cull: list) -> list:
     """
     fourths = [re.compile('[0][0-5][0-9][0-9]$'), re.compile('[0][6-9][0-9][0-9]$|[1][0-1][0-9][0-9]$'),
                re.compile('[1][2-7][0-9][0-9]$'), re.compile('[1][8-9][0-9][0-9]$|[2][0-3][0-9][0-9]$')]
-    fourths_list = []
-    for fourth in fourths:
-        fourths_list.append(split_dir_hours(dir_to_cull, fourth)[1:])
+    fourths_list = [split_dir_hours(dir_to_cull, fourth)[1:] for fourth in fourths]
     return list(itertools.chain.from_iterable(fourths_list))
 
 
@@ -60,11 +54,7 @@ def get_subvols_by_date(directory: str, reg_ex) -> list:
     :returns: A list of subvolumes for culling.
     """
     subvols = os.listdir(path=directory)
-    return_list = []
-    for subvol in subvols:
-        if reg_ex.search(subvol) is not None:
-            return_list.append(subvol)
-    return return_list
+    return [subvol for subvol in subvols if reg_ex.search(subvol) is not None]
 
 
 def btrfs_del(directory: str, subvols: list) -> list:
@@ -76,7 +66,7 @@ def btrfs_del(directory: str, subvols: list) -> list:
     to delete, returns a message with that information.
     """
     return_list = []
-    if len(subvols) > 0:
+    if subvols:
         for subvol in subvols:
             command = f"/usr/sbin/btrfs sub del {directory}/{subvol}"
             try:

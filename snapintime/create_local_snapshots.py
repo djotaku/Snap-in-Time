@@ -9,8 +9,7 @@ from snapintime.utils import config as config  # type: ignore
 def get_date_time() -> str:
     """Return the current time, uses system time zone."""
     now: datetime = datetime.now()
-    date_suffix: str = now.strftime("%Y-%m-%d-%H%M")
-    return date_suffix
+    return now.strftime("%Y-%m-%d-%H%M")
 
 
 def iterate_configs(date_time: str, config: dict) -> list:
@@ -21,11 +20,12 @@ def iterate_configs(date_time: str, config: dict) -> list:
     :param config: The config file, parsed by import_config.
     :returns: A list containing return values from create_snapshot
     """
-    return_list = []
-    for subvol in config.values():
-        return_list.append(create_snapshot(date_time, subvol.get("subvol"),
-                                           subvol.get("backuplocation")))
-    return return_list
+    return [
+        create_snapshot(
+            date_time, subvol.get("subvol"), subvol.get("backuplocation")
+        )
+        for subvol in config.values()
+    ]
 
 
 def create_snapshot(date_suffix: str, subvol: str, backup_location: str):
@@ -38,11 +38,18 @@ def create_snapshot(date_suffix: str, subvol: str, backup_location: str):
     command = f"/usr/sbin/btrfs sub snap -r {subvol} {backup_location}/{date_suffix}"
     try:
         raw_result = subprocess.run(command, capture_output=True, shell=True, check=True, text=True)
-        result = {"Command": raw_result.args, "Return Code": raw_result.returncode, "Output": raw_result.stdout}
-        return result
+        return {
+            "Command": raw_result.args,
+            "Return Code": raw_result.returncode,
+            "Output": raw_result.stdout,
+        }
+
     except subprocess.CalledProcessError as e:
-        error_result = {"Command": e.args[1], "Return Code": {e.returncode}, "Output": str(e.stderr)}
-        return error_result
+        return {
+            "Command": e.args[1],
+            "Return Code": {e.returncode},
+            "Output": str(e.stderr),
+        }
 
 
 def main():  # pragma: no cover

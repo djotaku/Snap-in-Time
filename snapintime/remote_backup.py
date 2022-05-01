@@ -19,8 +19,7 @@ def get_remote_subvols(remote_location: str, remote_subvol_dir: str) -> list:
     """
     command = f"ssh {remote_location} ls {remote_subvol_dir}"
     results = subprocess.run(command, capture_output=True, shell=True, check=True, text=True)
-    subvols = results.stdout.split('\n')
-    return subvols
+    return results.stdout.split('\n')
 
 
 def get_local_subvols(local_subvol_dir: str) -> list:
@@ -29,8 +28,7 @@ def get_local_subvols(local_subvol_dir: str) -> list:
     :param local_subvol_dir: The directory containing the local subvolumes.
     :returns: A list of all the local subvolumes
     """
-    subvols = os.listdir(path=local_subvol_dir)
-    return subvols
+    return os.listdir(path=local_subvol_dir)
 
 
 def match_subvols(local_subvols: list, remote_subvols: list) -> str:
@@ -44,9 +42,8 @@ def match_subvols(local_subvols: list, remote_subvols: list) -> str:
     candidate = sorted_remote[-1]
     if candidate in local_subvols:
         return candidate
-    else:
-        sorted_remote.pop()
-        return match_subvols(local_subvols, sorted_remote)
+    sorted_remote.pop()
+    return match_subvols(local_subvols, sorted_remote)
 
 
 def btrfs_send_receive(local_subvols: list, remote_subvol: str, backup_location: str,
@@ -67,11 +64,14 @@ def btrfs_send_receive(local_subvols: list, remote_subvol: str, backup_location:
     command = f"/usr/sbin/btrfs send -p {backup_location}/{remote_subvol} {backup_location}/{sorted_local[-1]} | ssh {remote_location} btrfs receive {remote_subvol_dir}"
     try:
         raw_result = subprocess.run(command, capture_output=True, shell=True, check=True, text=True)
-        result = {"Command": raw_result.args, "Return Code": raw_result.returncode, "Output": raw_result.stdout}
-        return result
+        return {
+            "Command": raw_result.args,
+            "Return Code": raw_result.returncode,
+            "Output": raw_result.stdout,
+        }
+
     except subprocess.SubprocessError as e:
-        error_result = {"Command": e.args, "Return Code": e.returncode, "Output": e.stderr}  # type: ignore
-        return error_result
+        return {"Command": e.args, "Return Code": e.returncode, "Output": e.stderr}
 
 
 def iterate_configs(config: dict) -> list:
@@ -89,8 +89,6 @@ def iterate_configs(config: dict) -> list:
             match = match_subvols(local_subvols, remote_subvols)
             return_list.append(btrfs_send_receive(local_subvols, match, subvol.get('backuplocation'),
                                                   subvol.get('remote_location'), subvol.get('remote_subvol_dir')))
-        else:
-            pass
     return return_list
 
 

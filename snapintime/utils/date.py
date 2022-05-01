@@ -13,8 +13,7 @@ def prior_date(start_date: datetime, day: int = 0) -> datetime:
     :returns: A datetime object day amount of days in the past.
     """
     delta_days = timedelta(days=day)
-    prev_date: datetime = start_date - delta_days
-    return prev_date
+    return start_date - delta_days
 
 
 def many_dates(start_date: datetime, interval_start: int, interval_end: int) -> list:
@@ -26,10 +25,10 @@ def many_dates(start_date: datetime, interval_start: int, interval_end: int) -> 
     :param interval_start: How many days ago you want to start getting dates from.
     :param interval_end: How many days ago you want to stop getting dates from.
     """
-    return_list = []
-    for day in range(interval_start, interval_end+1):
-        return_list.append(prior_date(start_date, day))
-    return return_list
+    return [
+        prior_date(start_date, day)
+        for day in range(interval_start, interval_end + 1)
+    ]
 
 
 def quarterly_weeks(start_date: datetime) -> list:
@@ -38,10 +37,10 @@ def quarterly_weeks(start_date: datetime) -> list:
     :param start_date: Date from which to go back a quarter.
     :returns: A list of lists containing datetime objects. Each sublist represents a week.
     """
-    list_of_weeks = []
-    for number in range(0, 90, 7):
-        list_of_weeks.append(many_dates(start_date, 90+number, 96+number))
-    return list_of_weeks
+    return [
+        many_dates(start_date, 90 + number, 96 + number)
+        for number in range(0, 90, 7)
+    ]
 
 
 def yearly_quarters(start_date: datetime) -> list:
@@ -49,7 +48,7 @@ def yearly_quarters(start_date: datetime) -> list:
 
     :param start_date: Date from which to go back a year.
     :returns: A list of lists containing datetime objects. Each sublist represents a quarter."""
-    list_of_quarters = []
-    for number in range(0, 275, 91):
-        list_of_quarters.append(many_dates(start_date, 365+number, 455+number))
-    return list_of_quarters
+    return [
+        many_dates(start_date, 365 + number, 455 + number)
+        for number in range(0, 275, 91)
+    ]
