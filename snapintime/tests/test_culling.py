@@ -20,7 +20,7 @@ def test_cull_hours_24_hours():
                           "2020-03-01-1200", "2020-03-01-1300", "2020-03-01-1400", "2020-03-01-1500",
                           "2020-03-01-1600", "2020-03-01-1700", "2020-03-01-1800", "2020-03-01-1900",
                           "2020-03-01-2000", "2020-03-01-2100", "2020-03-01-2200", "2020-03-01-2300"]
-    results = culling.daily_cull(hourly_dir_to_cull)
+    results = culling.generate_daily_cull_list(hourly_dir_to_cull)
     assert results == ["2020-03-01-0100", "2020-03-01-0200", "2020-03-01-0300", "2020-03-01-0400",
                        "2020-03-01-0500", "2020-03-01-0700", "2020-03-01-0800", "2020-03-01-0900",
                        "2020-03-01-1000", "2020-03-01-1100", "2020-03-01-1300", "2020-03-01-1400",
@@ -35,7 +35,7 @@ def test_cull_hours_irregular_hours():
                           "2020-03-01-1000", "2020-03-01-1100", "2020-03-01-1200", "2020-03-01-1300",
                           "2020-03-01-1400", "2020-03-01-1500", "2020-03-01-1600", "2020-03-01-1700",
                           "2020-03-01-1900", "2020-03-01-2300"]
-    results = culling.daily_cull(hourly_dir_to_cull)
+    results = culling.generate_daily_cull_list(hourly_dir_to_cull)
     assert results == ["2020-03-01-0200", "2020-03-01-0300", "2020-03-01-0400", "2020-03-01-0500",
                        "2020-03-01-0700", "2020-03-01-0800", "2020-03-01-1000", "2020-03-01-1100",
                        "2020-03-01-1300", "2020-03-01-1400", "2020-03-01-1500", "2020-03-01-1600",
@@ -45,26 +45,26 @@ def test_cull_hours_irregular_hours():
 def test_cull_hours_only_one_entry():
     """Test the daily cull if there is only one entry."""
     hourly_dir_to_cull = ["2020-03-01-0100"]
-    results = culling.daily_cull(hourly_dir_to_cull)
+    results = culling.generate_daily_cull_list(hourly_dir_to_cull)
     assert results == []
 
 
 def test_cull_hours_no_entries():
     """Test the daily cull if there are no snapshots to cull."""
     hourly_dir_to_cull = []
-    results = culling.daily_cull(hourly_dir_to_cull)
+    results = culling.generate_daily_cull_list(hourly_dir_to_cull)
     assert results == []
 
 
 def test_weekly_cull_perfect_list():
     """Test weekly cull if there are 4 snapshots to cull."""
     weekly_dir_to_cull = ["2020-03-16-0000", "2020-03-16-0600", "2020-03-16-1200", "2020-03-16-1800"]
-    results = culling.weekly_cull(weekly_dir_to_cull)
+    results = culling.generate_weekly_cull_list(weekly_dir_to_cull)
     assert results == ["2020-03-16-0000", "2020-03-16-0600", "2020-03-16-1200"]
 
 
 def test_weekly_cull_no_entries():
     """Test the weekly cull if there are no snapshots to cull."""
     weekly_dir_to_cull = []
-    results = culling.weekly_cull(weekly_dir_to_cull)
+    results = culling.generate_weekly_cull_list(weekly_dir_to_cull)
     assert results == []
