@@ -40,8 +40,8 @@ def generate_daily_cull_list(dir_to_cull: list) -> list:
     snapshots.
     :returns: A list containing all the subvolumes to cull.
     """
-    fourths = [re.compile('[0][0-5][0-9][0-9]$'), re.compile('[0][6-9][0-9][0-9]$|[1][0-1][0-9][0-9]$'),
-               re.compile('[1][2-7][0-9][0-9]$'), re.compile('[1][8-9][0-9][0-9]$|[2][0-3][0-9][0-9]$')]
+    fourths = [re.compile('0[0-5][0-9][0-9]$'), re.compile('0[6-9][0-9][0-9]$|1[0-1][0-9][0-9]$'),
+               re.compile('1[2-7][0-9][0-9]$'), re.compile('1[8-9][0-9][0-9]$|2[0-3][0-9][0-9]$')]
     fourths_list = [split_dir_hours(dir_to_cull, fourth)[1:] for fourth in fourths]
     return list(itertools.chain.from_iterable(fourths_list))
 
@@ -87,10 +87,10 @@ def btrfs_del(directory: str, subvols: list, remote: bool = False, remote_locati
                 log.debug(f'{remote=}')
                 log.debug(f'{remote_location=}')
                 log.debug(f'{command=}')
-                # raw_result = subprocess.run(command, capture_output=True, shell=True, check=True, text=True)
-                # return_text = f"Ran {raw_result.args} with a return code of {raw_result.returncode}.\n" \
-                #              f"Result was {str(raw_result.stdout)}"
-                # return_list.append(return_text)
+                raw_result = subprocess.run(command, capture_output=True, shell=True, check=True, text=True)
+                return_text = f"Ran {raw_result.args} with a return code of {raw_result.returncode}.\n" \
+                              f"Result was {str(raw_result.stdout)}"
+                return_list.append(return_text)
             except subprocess.SubprocessError as e:
                 error_text = f"Ran {e.args[1]} with a return code of {e.returncode}.\nResult was {str(e.stderr)}"  # type: ignore
                 return_list.append(error_text)
@@ -206,6 +206,8 @@ def generate_quarterly_yearly_cull_list(dir_to_cull: list) -> list:
 
 def remove_protected(subvol: dict, subvol_list_to_pare: list):
     protected_snapshots = subvol.get("remote_protected")
+    if protected_snapshots is None:
+        protected_snapshots = []
     return [subvol for subvol in subvol_list_to_pare if subvol not in protected_snapshots]
 
 
@@ -214,7 +216,7 @@ def cull_last_quarter(config: dict, remote: bool = False) -> list:
 
     Should leave 1 snapshot per week for 13 weeks.
 
-    :param remote: Are we doing this on the remote system
+    :param remote: Are we doing this on the remote system?
     :param config: The configuration file.
     :returns: A list containing the results of running the commands.
     """
@@ -239,11 +241,12 @@ def cull_last_quarter(config: dict, remote: bool = False) -> list:
     return return_list
 
 
-def cull_last_year(config: dict) -> list:
+def cull_last_year(config: dict, remote: bool = False) -> list:
     """Cull the btrfs snapshots from quarter.
 
     Should leave 1 snapshot per quarter for 4 quarters.
 
+    :param remote: If true, we're doing this on the remote system.
     :param config: The configuration file.
     :returns: A list containing the results of running the commands.
     """
@@ -257,9 +260,12 @@ def cull_last_year(config: dict) -> list:
             reg_ex_string_minus_final_or = reg_ex_string[:-1]
             quarterly_reg_ex = re.compile(reg_ex_string_minus_final_or)
             subvols_this_quarter = get_subvols_by_date(subvol.get("backuplocation"), quarterly_reg_ex)
+            if remote:
+                subvols_this_quarter = remove_protected(subvol, subvols_this_quarter)
             if len(subvols_this_quarter) != 0:
                 this_quarter_culled = generate_quarterly_yearly_cull_list(subvols_this_quarter)
-                return_list.append(btrfs_del(subvol.get("backuplocation"), this_quarter_culled))
+                return_list.append(btrfs_del(subvol.get("backuplocation"), this_quarter_culled, remote,
+                                             remote_location=subvol.get('remote_location')))
     return return_list
 
 

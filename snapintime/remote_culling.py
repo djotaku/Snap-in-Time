@@ -8,4 +8,6 @@ our_config = config.import_config()
 # weekly doesn't make sense either since that one is leaving 1 per day a week out
 # quarterly is the first one that makes sense to implement.
 quarterly_cull_result = culling.cull_last_quarter(our_config, True)
+yearly_cull_result = culling.cull_last_year(our_config, True)
 log.info(quarterly_cull_result)
+log.info(yearly_cull_result)
