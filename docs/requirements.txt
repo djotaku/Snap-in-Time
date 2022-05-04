@@ -1,2 +1,3 @@
 sphinx>=2.2
 xdgenvpy
+rich

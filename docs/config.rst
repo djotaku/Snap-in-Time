@@ -11,7 +11,8 @@ An example of the config.json file:
     "backuplocation": "/home/.snapshot",
     "remote": "True",
     "remote_location": "user@server",
-    "remote_subvol_dir": "/media/backups"
+    "remote_subvol_dir": "/media/backups",
+    "remote_protected":["2022-02-08-0000", "2022-02-15-0000", "2022-04-26-0000", "2021-10-17-0000", "2022-04-16-0000"]
     },
     "1":
     { "subvol": "/media/Photos",
@@ -29,3 +30,4 @@ An example of the config.json file:
 - remote: If set to True, an attempt will be made to backup to the remote location. Any other value or lack of this field means it will not try and backup to the remote location.
 - remote_location: The username@theserver where the backup subvolumes will be sent to.
 - remote_subvol_dir: Just like backuplocation, but on the remote machine.
+- remote_protected: A list of snapshots you don't want to del
