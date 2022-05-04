@@ -22,30 +22,6 @@ def split_dir_hours(subvols: list, reg_ex) -> list:
     return [subvol for subvol in subvols if reg_ex.search(subvol) is not None]
 
 
-def generate_daily_cull_list(dir_to_cull: list) -> list:
-    """Take a list of snapshots from a directory (already reduced to one day) and cull.
-
-    This culling will produce the closest it can to 4 snapshots\
-    for that day.
-
-    For a perfect set of 24 snapshots, it should leave behind (remove from list):
-
-    - day1-0000
-    - day1-0600
-    - day1-1200
-    - day1-1800
-
-    :param dir_to_cull: A list containing snapshots. Assumes another function\
-    has already reduced this list to a list containing only one day's worth of\
-    snapshots.
-    :returns: A list containing all the subvolumes to cull.
-    """
-    fourths = [re.compile('0[0-5][0-9][0-9]$'), re.compile('0[6-9][0-9][0-9]$|1[0-1][0-9][0-9]$'),
-               re.compile('1[2-7][0-9][0-9]$'), re.compile('1[8-9][0-9][0-9]$|2[0-3][0-9][0-9]$')]
-    fourths_list = [split_dir_hours(dir_to_cull, fourth)[1:] for fourth in fourths]
-    return list(itertools.chain.from_iterable(fourths_list))
-
-
 def get_subvols_by_date(directory: str, reg_ex, remote: bool = False, remote_location: str = "") -> list:
     """Return a list based on matching regular expression.
 

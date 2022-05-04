@@ -71,7 +71,7 @@ def btrfs_send_receive(local_subvols: list, remote_subvol: str, backup_location:
         }
 
     except subprocess.SubprocessError as e:
-        return {"Command": e.args, "Return Code": e.returncode, "Output": e.stderr}
+        return {"Command": e.args, "Return Code": e.returncode, "Output": e.stderr}  # type: ignore
 
 
 def iterate_configs(config: dict) -> list:
