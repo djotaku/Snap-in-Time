@@ -1,6 +1,6 @@
 # Examples
 
-In this directory are some examples of the config file and some scripts you could use to make cron work well with this program when using a virtual environment. 
+In this directory are some examples of the config file and some scripts you could use to make cron work well with this program when using a virtual environment.
 
 If using the example.config.json file, rename it to config.json and put it in $HOME/.config/snapintime (or /root/.config/snapintime/ if you’re going to run as root.
 

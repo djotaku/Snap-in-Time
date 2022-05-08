@@ -3,6 +3,6 @@ Culling
 =======
 
 .. automodule:: snapintime.culling
-    :members: 
+    :members:
     :undoc-members:
     :show-inheritance:

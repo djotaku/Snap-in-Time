@@ -4,6 +4,6 @@ config
 
 
 .. automodule:: snapintime.utils.config
-    :members: 
+    :members:
     :undoc-members:
     :show-inheritance:

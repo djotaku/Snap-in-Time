@@ -14,7 +14,7 @@ At this point in time it creates snapshots, culls local snapshots three days old
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-   
+
    usage
    config
    culling_explained

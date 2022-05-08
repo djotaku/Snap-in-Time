@@ -1,7 +1,7 @@
 """Test ability to create local snapshots."""
 
-from datetime import datetime
 import subprocess
+from datetime import datetime
 from unittest import mock
 
 from snapintime import create_local_snapshots

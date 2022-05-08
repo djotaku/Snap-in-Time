@@ -1,6 +1,6 @@
-from . import culling
-from . import log
 from snapintime.utils import config as config  # type: ignore
+
+from . import culling, log
 
 
 def main():

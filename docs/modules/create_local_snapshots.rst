@@ -3,6 +3,6 @@ create_local_snapshots
 ======================
 
 .. automodule:: snapintime.create_local_snapshots
-    :members: 
+    :members:
     :undoc-members:
     :show-inheritance:

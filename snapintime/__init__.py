@@ -6,6 +6,7 @@ __email__: str = "ericsbinaryworld at gmail dot com"
 
 
 import logging
+
 from rich.logging import RichHandler
 
 FORMAT = "%(message)s"

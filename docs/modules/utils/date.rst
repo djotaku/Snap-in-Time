@@ -3,6 +3,6 @@ date
 ====
 
 .. automodule:: snapintime.utils.date
-    :members: 
+    :members:
     :undoc-members:
     :show-inheritance:

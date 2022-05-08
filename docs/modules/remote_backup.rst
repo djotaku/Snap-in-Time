@@ -3,6 +3,6 @@ remote_backup
 ======================
 
 .. automodule:: snapintime.remote_backup
-    :members: 
+    :members:
     :undoc-members:
     :show-inheritance:

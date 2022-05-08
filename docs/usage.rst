@@ -10,8 +10,8 @@ Creating Local Snapshots
 If running from a git clone:
 
 .. code-block:: Bash
-   
-   pip -r requirements.txt 
+
+   pip -r requirements.txt
    cd snapintime
    python create_local_snapshots.py
 
@@ -25,8 +25,8 @@ If you want to run it from cron in a virtual environment, you can adapt the foll
     #!/bin/bash
     cd "/home/ermesa/Programming Projects/python/cronpip"
     source ./bin/activate
-    python -m snapintime.create_local_snapshots 
-    
+    python -m snapintime.create_local_snapshots
+
 Make it executable and have cron run that script as often as you like.
 
 For a more involved script, useful for logging, see `Putting it All Together`_.
@@ -37,8 +37,8 @@ Backing Up to Remote Location
 This code makes the assumption that you have setup ssh keys to allow you to ssh to the remote machine without inputting a password. It is recommended to run the remote backup code BEFORE the culling code to increase the chances that the last snapshot on the remote system is still on the local system. (This will minimize the amount of data that has to be transferred to the remote system.
 
 .. code-block:: Bash
-   
-   pip -r requirements.txt 
+
+   pip -r requirements.txt
    cd snapintime
    python remote_backup.py
 
@@ -59,8 +59,8 @@ The culling follows the following specification:
 I recommend running culling submodule AFTER remote backup (if you're doing the remote backups). This is to prevent the removal of the subvol you'd use for the btrfs send/receive. If your computer is constantly on without interruption, it shouldn't be an issue if you're doing your remote backups daily. And why wouldn't you? The smaller the diff betwen the last backup and this one, the less data you have to send over the network. So it's more of a precaution in case you turn it off for a while on vacation or the computer breaks for a while and can't do the backups.
 
 .. code-block:: Bash
-   
-   pip -r requirements.txt 
+
+   pip -r requirements.txt
    cd snapintime
    python culling.py
 

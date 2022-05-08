@@ -1,15 +1,16 @@
 """Thin out the snapshots on disk."""
 
-from datetime import datetime
 import itertools
 import os
 import re
 import subprocess
+from datetime import datetime
 from typing import Pattern
 
-from . import log
-from snapintime.utils import config as config  # type: ignore
 import snapintime.utils.date  # type: ignore
+from snapintime.utils import config as config  # type: ignore
+
+from . import log
 
 
 def split_dir_hours(subvols: list, reg_ex) -> list:
