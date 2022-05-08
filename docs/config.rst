@@ -30,4 +30,4 @@ An example of the config.json file:
 - remote: If set to True, an attempt will be made to backup to the remote location. Any other value or lack of this field means it will not try and backup to the remote location.
 - remote_location: The username@theserver where the backup subvolumes will be sent to.
 - remote_subvol_dir: Just like backuplocation, but on the remote machine.
-- remote_protected: A list of snapshots you don't want to del
+- remote_protected: A list of snapshots you don't want to delete. For example, these may be the last snapshot you used to another remote location or maybe you're using it for an NFS share and don't want it to be culled.
