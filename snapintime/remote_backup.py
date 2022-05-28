@@ -5,6 +5,8 @@ import subprocess
 
 from snapintime.utils import config as config  # type: ignore
 
+from . import log
+
 
 def get_remote_subvols(remote_location: str, remote_subvol_dir: str) -> list:
     """Retrieve the remote subvolumes.
@@ -96,8 +98,8 @@ def main():  # pragma: no cover
     our_config = config.import_config()
     results = iterate_configs(our_config)
     for result in results:
-        print(f"\nRan {result['Command']} with a return code of {result['Return Code']}")
-        print(f"Result was: {str(result['Output'])}\n")
+        log.info(f"\nRan {result['Command']} with a return code of {result['Return Code']}")
+        log.info(f"Result was: {str(result['Output'])}\n")
 
 
 if __name__ == "__main__":  # pragma: no cover
