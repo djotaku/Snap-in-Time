@@ -249,7 +249,7 @@ def cull_last_year(config: dict, remote: bool = False) -> list:
 def print_output(list_of_lists: list):  # pragma: no cover
     for directory in list_of_lists:
         for result in directory:
-            print(result)
+            log.info(result)
 
 
 def main():  # pragma: no cover
