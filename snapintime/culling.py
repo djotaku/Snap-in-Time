@@ -204,7 +204,7 @@ def cull_last_quarter(config: dict, remote: bool = False) -> list:
         for week in last_quarter:
             reg_ex_string = ""
             for day in week:
-                reg_ex_string = reg_ex_string + f'({day.strftime("%Y-%m-%d")})|'
+                reg_ex_string = f"{reg_ex_string}({day.strftime('%Y-%m-%d')})|"
             reg_ex_string_minus_final_or = reg_ex_string[:-1]
             weekly_reg_ex = re.compile(reg_ex_string_minus_final_or)
             subvols_this_week = get_subvols_by_date(subvol.get(location), weekly_reg_ex,
@@ -233,7 +233,7 @@ def cull_last_year(config: dict, remote: bool = False) -> list:
         for quarter in last_year:
             reg_ex_string = ""
             for day in quarter:
-                reg_ex_string = reg_ex_string + f'({day.strftime("%Y-%m-%d")})|'
+                reg_ex_string = f"{reg_ex_string}({day.strftime('%Y-%m-%d')})|"
             reg_ex_string_minus_final_or = reg_ex_string[:-1]
             quarterly_reg_ex = re.compile(reg_ex_string_minus_final_or)
             subvols_this_quarter = get_subvols_by_date(subvol.get("backuplocation"), quarterly_reg_ex)
