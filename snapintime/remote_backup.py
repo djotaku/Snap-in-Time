@@ -41,6 +41,7 @@ def match_subvols(local_subvols: list, remote_subvols: list) -> str:
     :returns: The subvolume.
     """
     sorted_remote = sorted(remote_subvols)
+    log.debug(f"{sorted_remote=}")
     candidate = sorted_remote[-1]
     if candidate in local_subvols:
         return candidate
@@ -76,7 +77,7 @@ def btrfs_send_receive(local_subvols: list, remote_subvol: str, backup_location:
         return {"Command": e.args, "Return Code": e.returncode, "Output": e.stderr}  # type: ignore
 
 
-def iterate_configs(config: dict) -> list:
+def iterate_over_subvolumes(config: dict) -> list:
     """Iterate over all the subvolumes in the config file, then call\
     btrfs_send_receive if the value of remote is "True".
 
@@ -86,7 +87,9 @@ def iterate_configs(config: dict) -> list:
     return_list = []
     for subvol in config.values():
         if subvol.get("remote") == "True":
+            log.debug(f"Starting on {subvol.get('subvol')}")
             remote_subvols = get_remote_subvols(subvol.get('remote_location'), subvol.get('remote_subvol_dir'))
+            log.debug(f"Remote subvols are: {remote_subvols}")
             local_subvols = get_local_subvols(subvol.get("backuplocation"))
             match = match_subvols(local_subvols, remote_subvols)
             return_list.append(btrfs_send_receive(local_subvols, match, subvol.get('backuplocation'),
@@ -95,8 +98,9 @@ def iterate_configs(config: dict) -> list:
 
 
 def main():  # pragma: no cover
+    log.info("Beginning snapshot remote backups....")
     our_config = config.import_config()
-    results = iterate_configs(our_config)
+    results = iterate_over_subvolumes(our_config)
     for result in results:
         log.info(f"\nRan {result['Command']} with a return code of {result['Return Code']}")
         log.info(f"Result was: {str(result['Output'])}\n")
