@@ -94,8 +94,7 @@ def generate_daily_cull_list(dir_to_cull: list) -> list:
     snapshots.
     :returns: A list containing all the subvolumes to cull.
     """
-    fourths: list[Pattern[str]] = [re.c
-2022-09-08 18:00:03,514 - snapintime - INFO - Result was: Crompile(r'0[0-5]\d\d$'),
+    fourths: list[Pattern[str]] = [re.compile(r'0[0-5]\d\d$'),
                                    re.compile(r'0[6-9]\d\d$|1[0-1]\d\d$'),
                                    re.compile(r'1[2-7]\d\d$'),
                                    re.compile(r'1[8-9]\d\d$|2[0-3]\d\d$')]
