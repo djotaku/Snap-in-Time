@@ -54,6 +54,7 @@ def create_snapshot(date_suffix: str, subvol: str, backup_location: str):
 
 
 def main():  # pragma: no cover
+    log.info("Creating local snapshots....")
     date_time_for_backup = get_date_time()
     our_config = config.import_config()
     results = iterate_configs(date_time_for_backup, our_config)
