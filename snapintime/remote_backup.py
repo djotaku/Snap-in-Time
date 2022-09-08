@@ -87,7 +87,7 @@ def iterate_over_subvolumes(config: dict) -> list:
     return_list = []
     for subvol in config.values():
         if subvol.get("remote") == "True":
-            log.debug(f"Starting on {subvol.get('subvol')}")
+            log.info(f"Starting on {subvol.get('subvol')}")
             remote_subvols = get_remote_subvols(subvol.get('remote_location'), subvol.get('remote_subvol_dir'))
             log.debug(f"Remote subvols are: {remote_subvols}")
             local_subvols = get_local_subvols(subvol.get("backuplocation"))
