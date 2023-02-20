@@ -72,7 +72,7 @@ def btrfs_del(directory: str, subvols: list, remote: bool = False, remote_locati
                 error_text = f"Ran {e.args[1]} with a return code of {e.returncode}.\nResult was {str(e.stderr)}"  # type: ignore
                 return_list.append(error_text)
     else:
-        return_list = ["There was either only one or no subvolumes at that date"]
+        return_list = [f"There was either only one or no subvolumes in {directory} at that date"]
     return return_list
 
 
@@ -155,6 +155,7 @@ def cull_seven_days_ago(configuration: dict, remote: bool = False) -> list:
     for subvol in configuration.values():
         location: str = "remote_subvol_dir" if remote else "backuplocation"
         subvols_seven_days_ago = get_subvols_by_date(subvol.get(location), seven_days_ago_reg_ex)
+        log.debug(f"for {subvol.get(location)} {subvols_seven_days_ago=}")
         if remote:
             subvols_seven_days_ago = remove_protected(subvol, subvols_seven_days_ago)
         if len(subvols_seven_days_ago) != 0:
