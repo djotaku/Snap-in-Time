@@ -43,7 +43,7 @@ def get_subvols_by_date(directory: str, reg_ex, remote: bool = False, remote_loc
     return [subvol for subvol in subvols if reg_ex.search(subvol) is not None]
 
 
-def btrfs_del(directory: str, subvols: list, remote: bool = False, remote_location: str = "") -> list:
+def btrfs_del(directory: str, subvols: list, remote: bool = False, remote_location: str = "") -> list[str]:
     """Delete subvolumes in a given directory.
 
     :param remote_location: This should be a string like user@computer or user@IPaddress
@@ -102,19 +102,19 @@ def generate_daily_cull_list(dir_to_cull: list) -> list:
     return list(itertools.chain.from_iterable(fourths_list))
 
 
-def cull_three_days_ago(config: dict) -> list:
+def cull_three_days_ago(configuration: dict) -> list:
     """Cull the btrfs snapshots from 3 days ago.
 
     Take snapshots that were taken on the third day in the past and cull to 4 (max) snapshots.
 
-    :param config: The configuration file.
+    :param configuration: The configuration file.
     :returns: A list containing the results of running the commands.
     """
     location: str = "backuplocation"
     three_days_ago: str = snapintime.utils.date.prior_date(datetime.now(), 3).strftime("%Y-%m-%d")
     three_days_ago_reg_ex = re.compile(three_days_ago)
     return_list = []
-    for subvol in config.values():
+    for subvol in configuration.values():
         subvols_three_days_ago = get_subvols_by_date(subvol.get(location), three_days_ago_reg_ex)
         three_days_ago_culled = generate_daily_cull_list(subvols_three_days_ago)
         return_list.append(btrfs_del(subvol.get(location), three_days_ago_culled))
@@ -142,19 +142,26 @@ def generate_weekly_cull_list(dir_to_cull: list) -> list:
     return sorted_dir_to_cull
 
 
-def cull_seven_days_ago(config: dict) -> list:
+def cull_seven_days_ago(configuration: dict, remote: bool = False) -> list:
     """Cull the btrfs snapshots from 7 days ago.
 
-    :param config: The configuration file.
+    :param remote: True if culling on the remote server
+    :param configuration: The configuration file.
     :returns: A list containing the results of running the commands.
     """
     seven_days_ago: str = snapintime.utils.date.prior_date(datetime.now(), 7).strftime("%Y-%m-%d")
     seven_days_ago_reg_ex = re.compile(seven_days_ago)
     return_list = []
-    for subvol in config.values():
-        subvols_seven_days_ago = get_subvols_by_date(subvol.get("backuplocation"), seven_days_ago_reg_ex)
-        seven_days_ago_culled = generate_weekly_cull_list(subvols_seven_days_ago)
-        return_list.append(btrfs_del(subvol.get("backuplocation"), seven_days_ago_culled))
+    for subvol in configuration.values():
+        location: str = "remote_subvol_dir" if remote else "backuplocation"
+        subvols_seven_days_ago = get_subvols_by_date(subvol.get(location), seven_days_ago_reg_ex)
+        if remote:
+            subvols_seven_days_ago = remove_protected(subvol, subvols_seven_days_ago)
+        if len(subvols_seven_days_ago) != 0:
+            seven_days_ago_culled = generate_weekly_cull_list(subvols_seven_days_ago)
+            return_list.append(btrfs_del(subvol.get(location), seven_days_ago_culled, remote,
+                               remote_location=subvol.get('remote_location')))
+
     return return_list
 
 
@@ -188,19 +195,19 @@ def remove_protected(subvol: dict, subvol_list_to_pare: list):
     return [subvol for subvol in subvol_list_to_pare if subvol not in protected_snapshots]
 
 
-def cull_last_quarter(config: dict, remote: bool = False) -> list:
+def cull_last_quarter(configuration: dict, remote: bool = False) -> list:
     """Cull the btrfs snapshots from quarter.
 
     Should leave 1 snapshot per week for 13 weeks.
 
     :param remote: Are we doing this on the remote system?
-    :param config: The configuration file.
+    :param configuration: The configuration file.
     :returns: A list containing the results of running the commands.
     """
     last_quarter: list = snapintime.utils.date.quarterly_weeks(datetime.now())
     location: str = "remote_subvol_dir" if remote else "backuplocation"
     return_list = []
-    for subvol in config.values():
+    for subvol in configuration.values():
         for week in last_quarter:
             reg_ex_string = ""
             for day in week:
@@ -218,18 +225,18 @@ def cull_last_quarter(config: dict, remote: bool = False) -> list:
     return return_list
 
 
-def cull_last_year(config: dict, remote: bool = False) -> list:
+def cull_last_year(configuration: dict, remote: bool = False) -> list:
     """Cull the btrfs snapshots from quarter.
 
     Should leave 1 snapshot per quarter for 4 quarters.
 
     :param remote: If true, we're doing this on the remote system.
-    :param config: The configuration file.
+    :param configuration: The configuration file.
     :returns: A list containing the results of running the commands.
     """
     last_year: list = snapintime.utils.date.yearly_quarters(datetime.now())
     return_list = []
-    for subvol in config.values():
+    for subvol in configuration.values():
         for quarter in last_year:
             reg_ex_string = ""
             for day in quarter:
