@@ -154,7 +154,8 @@ def cull_seven_days_ago(configuration: dict, remote: bool = False) -> list:
     return_list = []
     for subvol in configuration.values():
         location: str = "remote_subvol_dir" if remote else "backuplocation"
-        subvols_seven_days_ago = get_subvols_by_date(subvol.get(location), seven_days_ago_reg_ex, True)
+        subvols_seven_days_ago = get_subvols_by_date(subvol.get(location), seven_days_ago_reg_ex, True,
+                                                     subvol.get("remote_location"))
         log.debug(f"for {subvol.get(location)} {subvols_seven_days_ago=}")
         if remote:
             subvols_seven_days_ago = remove_protected(subvol, subvols_seven_days_ago)
