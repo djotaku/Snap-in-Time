@@ -1,12 +1,2 @@
-attrs~=21.4.0
-mypy~=0.950
-packaging~=21.3
-pluggy~=1.0.0
-py~=1.11.0
-pyparsing~=3.0.8
-pytest~=7.1.2
-xdgenvpy~=2.3.5
-
-wheel~=0.37.1
-Pygments~=2.12.0
-rich~=12.3.0
+xdgenvpy
+rich

@@ -14,3 +14,4 @@ pyvenv.cfg
 */*.mypy_cache/*
 .idea/
 snapintime/utils/.mypy_cache/
+venv
