@@ -103,7 +103,7 @@ def main():  # pragma: no cover
     our_config = config.import_config()
     results = iterate_over_subvolumes(our_config)
     for result in results:
-        log.info(f"\nRan {result['Command']} with a return code of {result['Return Code']}")
+        log.info(f"\nRan {result.get('Command')} with a return code of {result.get('Return Code')}")
         log.info(f"Result was: {str(result['Output'])}\n")
 
 

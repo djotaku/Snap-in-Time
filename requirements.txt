@@ -1,2 +1,2 @@
-xdgenvpy
-rich
+xdgenvpy == 2.4.0
+rich == 13.7.1

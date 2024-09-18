@@ -59,7 +59,7 @@ def main():  # pragma: no cover
     our_config = config.import_config()
     results = iterate_configs(date_time_for_backup, our_config)
     for result in results:
-        log.info(f"Ran: {result['Command']}. Command had a return code of {result['Return Code']}")
+        log.info(f"Ran: {result.get('Command')}. Command had a return code of {result.get('Return Code')}")
         log.info(f"Result was: {str(result['Output'])}")
 
 
