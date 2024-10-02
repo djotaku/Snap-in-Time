@@ -237,6 +237,7 @@ def cull_last_year(configuration: dict, remote: bool = False) -> list:
     :returns: A list containing the results of running the commands.
     """
     last_year: list = snapintime.utils.date.yearly_quarters(datetime.now())
+    location: str = "remote_subvol_dir" if remote else "backuplocation"
     return_list = []
     for subvol in configuration.values():
         for quarter in last_year:
@@ -245,13 +246,13 @@ def cull_last_year(configuration: dict, remote: bool = False) -> list:
                 reg_ex_string = f"{reg_ex_string}({day.strftime('%Y-%m-%d')})|"
             reg_ex_string_minus_final_or = reg_ex_string[:-1]
             quarterly_reg_ex = re.compile(reg_ex_string_minus_final_or)
-            subvols_this_quarter = get_subvols_by_date(subvol.get("backuplocation"), quarterly_reg_ex)
+            subvols_this_quarter = get_subvols_by_date(subvol.get(location), quarterly_reg_ex)
             if remote:
                 subvols_this_quarter = remove_protected(subvol, subvols_this_quarter)
             if len(subvols_this_quarter) != 0:
                 this_quarter_culled = generate_quarterly_yearly_cull_list(subvols_this_quarter)
-                return_list.append(btrfs_del(subvol.get("backuplocation"), this_quarter_culled, remote,
-                                             remote_location=subvol.get('remote_location')))
+                return_list.append(btrfs_del(subvol.get(location), this_quarter_culled, remote,
+                                             remote_location=subvol.get(location)))
     return return_list
 
 
