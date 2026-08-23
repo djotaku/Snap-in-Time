@@ -1,11 +1,10 @@
 """Thin out the snapshots on disk."""
 
-import itertools
 import os
 import re
 import subprocess
-from datetime import datetime
-from typing import Pattern
+from datetime import datetime, timedelta
+from typing import Optional
 
 import snapintime.utils.date  # type: ignore
 from snapintime.utils import config as config  # type: ignore
@@ -13,14 +12,8 @@ from snapintime.utils import config as config  # type: ignore
 from . import log
 
 
-def split_dir_hours(subvols: list, reg_ex) -> list:
-    """Return a list based on matching regular expression.
-
-    :param subvols: A list of subvolumes.
-    :param reg_ex: A re object defining the regular expression to evaluate against.
-    :returns: A list that has only the items that passed the regular expression.
-    """
-    return [subvol for subvol in subvols if reg_ex.search(subvol) is not None]
+SNAPSHOT_RE = re.compile(r"^\d{4}-\d{2}-\d{2}-\d{4}$")
+SNAPSHOT_FORMAT = "%Y-%m-%d-%H%M"
 
 
 def get_subvols_by_date(directory: str, reg_ex, remote: bool = False, remote_location: str = "") -> list:
@@ -76,118 +69,92 @@ def btrfs_del(directory: str, subvols: list, remote: bool = False, remote_locati
     return return_list
 
 
-def generate_daily_cull_list(dir_to_cull: list) -> list:
-    """Take a list of snapshots from a directory (already reduced to one day) and cull.
+def _parse_snapshots(snapshot_names: list) -> list[tuple[datetime, str]]:
+    """Return valid snapshot names paired with their timestamps."""
+    parsed_snapshots = []
+    for snapshot_name in snapshot_names:
+        if SNAPSHOT_RE.fullmatch(snapshot_name) is None:
+            continue
+        try:
+            parsed_snapshots.append((datetime.strptime(snapshot_name, SNAPSHOT_FORMAT), snapshot_name))
+        except ValueError:
+            continue
+    return sorted(parsed_snapshots)
 
-    This culling will produce the closest it can to 4 snapshots\
-    for that day.
 
-    For a perfect set of 24 snapshots, it should leave behind (remove from list):
+def _closest_snapshot(snapshots: list[tuple[datetime, str]], target: datetime) -> str:
+    """Return the snapshot closest to a representative time."""
+    return min(snapshots, key=lambda snapshot: (abs(snapshot[0] - target), -snapshot[0].timestamp()))[1]
 
-    - day1-0000
-    - day1-0600
-    - day1-1200
-    - day1-1800
 
-    :param dir_to_cull: A list containing snapshots. Assumes another function\
-    has already reduced this list to a list containing only one day's worth of\
-    snapshots.
-    :returns: A list containing all the subvolumes to cull.
+def generate_retention_cull_list(snapshot_names: list, now: Optional[datetime] = None) -> list:
+    """Return snapshots that fall outside the progressive retention policy.
+
+    The policy retains all snapshots for two days, four representative snapshots
+    per calendar day through seven days, one per calendar day through thirteen
+    weeks, one per ISO week through one year, and one per calendar quarter after
+    that. Invalid or non-snapshot directory entries are left untouched.
     """
-    fourths: list[Pattern[str]] = [re.compile(r'0[0-5]\d\d$'),
-                                   re.compile(r'0[6-9]\d\d$|1[0-1]\d\d$'),
-                                   re.compile(r'1[2-7]\d\d$'),
-                                   re.compile(r'1[8-9]\d\d$|2[0-3]\d\d$')]
-    fourths_list = [split_dir_hours(dir_to_cull, fourth)[1:] for fourth in fourths]
-    return list(itertools.chain.from_iterable(fourths_list))
+    reference_time = now or datetime.now()
+    parsed_snapshots = _parse_snapshots(snapshot_names)
+    hourly_cutoff = timedelta(days=2)
+    six_hour_cutoff = timedelta(days=7)
+    daily_cutoff = timedelta(weeks=13)
+    weekly_cutoff = timedelta(days=365)
+    snapshots_by_group: dict[tuple, list[tuple[datetime, str]]] = {}
+    retained = set()
+
+    for snapshot_time, snapshot_name in parsed_snapshots:
+        age = reference_time - snapshot_time
+        if age < timedelta(0) or age < hourly_cutoff:
+            retained.add(snapshot_name)
+            continue
+
+        if age < six_hour_cutoff:
+            group = ("six-hour", snapshot_time.date())
+        elif age < daily_cutoff:
+            group = ("daily", snapshot_time.date())
+        elif age < weekly_cutoff:
+            group = ("weekly", snapintime.utils.date.iso_week(snapshot_time))
+        else:
+            group = ("quarterly", snapintime.utils.date.calendar_quarter(snapshot_time))
+        snapshots_by_group.setdefault(group, []).append((snapshot_time, snapshot_name))
+
+    for (frequency, period), snapshots in snapshots_by_group.items():
+        if frequency == "six-hour":
+            targets = [datetime.combine(period, datetime.min.time()).replace(hour=hour) for hour in (0, 6, 12, 18)]
+        elif frequency == "daily":
+            targets = [datetime.combine(period, datetime.min.time()).replace(hour=18)]
+        elif frequency == "weekly":
+            week_start = datetime.fromisocalendar(period[0], period[1], 1)
+            targets = [week_start.replace(hour=18) + timedelta(days=6)]
+        else:
+            quarter_end = snapintime.utils.date.quarter_end(datetime(period[0], (period[1] - 1) * 3 + 1, 1))
+            targets = [quarter_end.replace(hour=18)]
+
+        for target in targets:
+            if snapshots:
+                retained.add(_closest_snapshot(snapshots, target))
+
+    parsed_names = {snapshot_name for _, snapshot_name in parsed_snapshots}
+    return [snapshot_name for snapshot_name in snapshot_names
+            if snapshot_name in parsed_names and snapshot_name not in retained]
 
 
-def cull_three_days_ago(configuration: dict) -> list:
-    """Cull the btrfs snapshots from 3 days ago.
-
-    Take snapshots that were taken on the third day in the past and cull to 4 (max) snapshots.
-
-    :param configuration: The configuration file.
-    :returns: A list containing the results of running the commands.
-    """
-    location: str = "backuplocation"
-    three_days_ago: str = snapintime.utils.date.prior_date(datetime.now(), 3).strftime("%Y-%m-%d")
-    three_days_ago_reg_ex = re.compile(three_days_ago)
+def cull_snapshots(configuration: dict, remote: bool = False, now: Optional[datetime] = None) -> list:
+    """Cull all configured snapshot directories using the retention policy."""
+    location = "remote_subvol_dir" if remote else "backuplocation"
     return_list = []
     for subvol in configuration.values():
-        subvols_three_days_ago = get_subvols_by_date(subvol.get(location), three_days_ago_reg_ex)
-        three_days_ago_culled = generate_daily_cull_list(subvols_three_days_ago)
-        return_list.append(btrfs_del(subvol.get(location), three_days_ago_culled))
-    return return_list
-
-
-def generate_weekly_cull_list(dir_to_cull: list) -> list:
-    """Take a list of snapshots from a directory (already reduced to one day) and cull.
-
-        This culling will return a list with the snapshots to remove for the given day.
-
-        For a perfect set of snapshots, (where the user has been doing one snapshot per hour and \
-        doing the daily culling) it should leave behind (remove from list):
-
-        - day1-1800
-
-        :param dir_to_cull: A list containing snapshots. Assumes another function\
-        has already reduced this list to a list containing only one week's worth of\
-        snapshots.
-        :returns: A list containing all the subvolumes to cull.
-        """
-    sorted_dir_to_cull = sorted(dir_to_cull)
-    if len(sorted_dir_to_cull) != 0:
-        sorted_dir_to_cull.pop()
-    return sorted_dir_to_cull
-
-
-def cull_seven_days_ago(configuration: dict, remote: bool = False) -> list:
-    """Cull the btrfs snapshots from 7 days ago.
-
-    :param remote: True if culling on the remote server
-    :param configuration: The configuration file.
-    :returns: A list containing the results of running the commands.
-    """
-    seven_days_ago: str = snapintime.utils.date.prior_date(datetime.now(), 7).strftime("%Y-%m-%d")
-    seven_days_ago_reg_ex = re.compile(seven_days_ago)
-    return_list = []
-    for subvol in configuration.values():
-        location: str = "remote_subvol_dir" if remote else "backuplocation"
-        subvols_seven_days_ago = get_subvols_by_date(subvol.get(location), seven_days_ago_reg_ex, True,
-                                                     subvol.get("remote_location"))
-        log.debug(f"for {subvol.get(location)} {subvols_seven_days_ago=}")
+        directory = subvol.get(location)
+        snapshots = get_subvols_by_date(directory, SNAPSHOT_RE, remote, subvol.get("remote_location"))
+        snapshots_to_delete = generate_retention_cull_list(snapshots, now)
         if remote:
-            subvols_seven_days_ago = remove_protected(subvol, subvols_seven_days_ago)
-        if len(subvols_seven_days_ago) != 0:
-            seven_days_ago_culled = generate_weekly_cull_list(subvols_seven_days_ago)
-            return_list.append(btrfs_del(subvol.get(location), seven_days_ago_culled, remote,
-                               remote_location=subvol.get('remote_location')))
-
+            snapshots_to_delete = remove_protected(subvol, snapshots_to_delete)
+        if snapshots_to_delete:
+            return_list.append(btrfs_del(directory, snapshots_to_delete, remote,
+                                         remote_location=subvol.get("remote_location")))
     return return_list
-
-
-def generate_quarterly_yearly_cull_list(dir_to_cull: list) -> list:
-    """Take a list of snapshots from a directory (already reduced to one week or quarter) and cull.
-
-            This culling will return a list with the snapshots to remove for the week or quarter.
-
-            For a perfect set of snapshots, (where the user has been doing one snapshot per hour and \
-            doing the daily culling) it should leave behind (remove from list):
-
-            - day7-1800
-
-            .. note:: May end up combining with weekly cull as they essentially do the same thing.
-
-            :param dir_to_cull: A list containing snapshots. Assumes another function\
-            has already reduced this list to a list containing only one week or quarter's worth of\
-            snapshots.
-            :returns: A list containing all the subvolumes to cull.
-            """
-    sorted_dir_to_cull = sorted(dir_to_cull)
-    if len(sorted_dir_to_cull) != 0:
-        sorted_dir_to_cull.pop()
-    return sorted_dir_to_cull
 
 
 def remove_protected(subvol: dict, subvol_list_to_pare: list):
@@ -195,65 +162,6 @@ def remove_protected(subvol: dict, subvol_list_to_pare: list):
     if protected_snapshots is None:
         protected_snapshots = []
     return [subvol for subvol in subvol_list_to_pare if subvol not in protected_snapshots]
-
-
-def cull_last_quarter(configuration: dict, remote: bool = False) -> list:
-    """Cull the btrfs snapshots from quarter.
-
-    Should leave 1 snapshot per week for 13 weeks.
-
-    :param remote: Are we doing this on the remote system?
-    :param configuration: The configuration file.
-    :returns: A list containing the results of running the commands.
-    """
-    last_quarter: list = snapintime.utils.date.quarterly_weeks(datetime.now())
-    location: str = "remote_subvol_dir" if remote else "backuplocation"
-    return_list = []
-    for subvol in configuration.values():
-        for week in last_quarter:
-            reg_ex_string = ""
-            for day in week:
-                reg_ex_string = f"{reg_ex_string}({day.strftime('%Y-%m-%d')})|"
-            reg_ex_string_minus_final_or = reg_ex_string[:-1]
-            weekly_reg_ex = re.compile(reg_ex_string_minus_final_or)
-            subvols_this_week = get_subvols_by_date(subvol.get(location), weekly_reg_ex,
-                                                    remote, subvol.get("remote_location"))
-            if remote:
-                subvols_this_week = remove_protected(subvol, subvols_this_week)
-            if len(subvols_this_week) != 0:
-                this_week_culled = generate_quarterly_yearly_cull_list(subvols_this_week)
-                return_list.append(btrfs_del(subvol.get(location), this_week_culled, remote,
-                                             remote_location=subvol.get('remote_location')))
-    return return_list
-
-
-def cull_last_year(configuration: dict, remote: bool = False) -> list:
-    """Cull the btrfs snapshots from quarter.
-
-    Should leave 1 snapshot per quarter for 4 quarters.
-
-    :param remote: If true, we're doing this on the remote system.
-    :param configuration: The configuration file.
-    :returns: A list containing the results of running the commands.
-    """
-    last_year: list = snapintime.utils.date.yearly_quarters(datetime.now())
-    location: str = "remote_subvol_dir" if remote else "backuplocation"
-    return_list = []
-    for subvol in configuration.values():
-        for quarter in last_year:
-            reg_ex_string = ""
-            for day in quarter:
-                reg_ex_string = f"{reg_ex_string}({day.strftime('%Y-%m-%d')})|"
-            reg_ex_string_minus_final_or = reg_ex_string[:-1]
-            quarterly_reg_ex = re.compile(reg_ex_string_minus_final_or)
-            subvols_this_quarter = get_subvols_by_date(subvol.get(location), quarterly_reg_ex)
-            if remote:
-                subvols_this_quarter = remove_protected(subvol, subvols_this_quarter)
-            if len(subvols_this_quarter) != 0:
-                this_quarter_culled = generate_quarterly_yearly_cull_list(subvols_this_quarter)
-                return_list.append(btrfs_del(subvol.get(location), this_quarter_culled, remote,
-                                             remote_location=subvol.get(location)))
-    return return_list
 
 
 def print_output(list_of_lists: list):  # pragma: no cover
@@ -264,14 +172,7 @@ def print_output(list_of_lists: list):  # pragma: no cover
 
 def main():  # pragma: no cover
     our_config = config.import_config()
-    three_day_cull_result = cull_three_days_ago(our_config)
-    print_output(three_day_cull_result)
-    seven_day_cull_result = cull_seven_days_ago(our_config)
-    print_output(seven_day_cull_result)
-    quarter_cull_result = cull_last_quarter(our_config)
-    print_output(quarter_cull_result)
-    year_cull_result = cull_last_year(our_config)
-    print_output(year_cull_result)
+    print_output(cull_snapshots(our_config))
 
 
 if __name__ == "__main__":  # pragma: no cover
