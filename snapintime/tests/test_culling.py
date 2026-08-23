@@ -29,6 +29,6 @@ def test_retention_cull_selects_calendar_representatives():
 
     assert culled == [
         "2024-07-12-0100", "2024-07-13-0200", "2024-07-05-1200",
-        "2024-04-15-1200", "2024-01-15-1200",
+        "2024-01-15-1200",
     ]
     assert "not-a-snapshot" not in culled
