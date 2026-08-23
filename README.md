@@ -1,7 +1,7 @@
 Snap-in-Time
 ============
 
-![Lint,PyTest, MyPy, and Coverage](https://github.com/djotaku/Snap-in-Time/workflows/Lint,PyTest,%20MyPy,%20and%20Coverage/badge.svg) [![codecov](https://codecov.io/gh/djotaku/Snap-in-Time/branch/master/graph/badge.svg)](https://codecov.io/gh/djotaku/Snap-in-Time) [![Documentation Status](https://readthedocs.org/projects/snap-in-time/badge/?version=latest)](https://snap-in-time.readthedocs.io/en/latest/?badge=latest)
+![Lint and PyTest](https://github.com/djotaku/Snap-in-Time/workflows/Lint,PyTest,%20MyPy,%20and%20Coverage/badge.svg) [![Documentation Status](https://readthedocs.org/projects/snap-in-time/badge/?version=latest)](https://snap-in-time.readthedocs.io/en/latest/?badge=latest)
 
 script for btrfs backups to create hourly snapshots, remote backups, and cull the snapshots.
 
