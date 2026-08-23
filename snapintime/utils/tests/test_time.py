@@ -226,3 +226,15 @@ def test_yearly_quarters():
                 datetime(2018, 4, 3, 0, 0), datetime(2018, 4, 2, 0, 0), datetime(2018, 4, 1, 0, 0),
                 datetime(2018, 3, 31, 0, 0)]
     assert list_of_quarters == [quarter1, quarter2, quarter3, quarter4]
+
+
+def test_iso_week():
+    assert snapintime.utils.date.iso_week(datetime(2024, 1, 1)) == (2024, 1)
+
+
+def test_calendar_quarter():
+    assert snapintime.utils.date.calendar_quarter(datetime(2024, 7, 1)) == (2024, 3)
+
+
+def test_quarter_end():
+    assert snapintime.utils.date.quarter_end(datetime(2024, 2, 10)) == datetime(2024, 3, 31)

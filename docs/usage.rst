@@ -47,14 +47,17 @@ If running from PyPi, run: python -m snapintime.remote_backup
 Culling Local Snapshots
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-The culling follows the following specification:
+The culling follows this progressive retention policy. Days are calendar days,
+weeks are ISO weeks, and quarters are calendar quarters:
 
-- Three days ago: Leave at most 4 snapshots behind - closest snapshots to 0000, 0600, 1200, and 1800. (implemented)
-- Seven days ago: Leave at most 1 snapshot behind - the last one that day. In a perfect situation, it would be the one taken at 1800. (implemented)
-- 90 days ago: Go from that date up another 90 days and leave at most 1 snapshot per week. (implemented)
-- 365 days ago: Go form that date up another 365 days and leave at most 1 snapshot per quarter (implemented)
+- Keep all hourly snapshots for the most recent two days.
+- For the next five days, keep up to four snapshots per calendar day, closest to 0000, 0600, 1200, and 1800.
+- For the next twelve weeks, keep one snapshot per calendar day, closest to 1800.
+- For the next three quarters, keep one snapshot per ISO week, closest to Sunday at 1800.
+- After one year, keep one snapshot per calendar quarter, closest to the end of the quarter at 1800.
 
-(Not going to care about leap years, eventually it'll fix itself if this is run regularly)
+The ideal history contains 191 snapshots through the first year, plus one
+snapshot per quarter for older history.
 
 I recommend running culling submodule AFTER remote backup (if you're doing the remote backups). This is to prevent the removal of the subvol you'd use for the btrfs send/receive. If your computer is constantly on without interruption, it shouldn't be an issue if you're doing your remote backups daily. And why wouldn't you? The smaller the diff betwen the last backup and this one, the less data you have to send over the network. So it's more of a precaution in case you turn it off for a while on vacation or the computer breaks for a while and can't do the backups.
 
