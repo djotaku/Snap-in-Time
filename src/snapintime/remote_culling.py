@@ -8,7 +8,7 @@ def main():
     result = culling.cull_snapshots(our_config, True)
     log.info(result)
     slog.info(
-        StructuredMessage("Culling", result=result)
+        StructuredMessage("Remote Culling", result=result)
     )  # may need to tweak things here to get something useful
 
 

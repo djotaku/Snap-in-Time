@@ -106,7 +106,7 @@ def main():  # pragma: no cover
         log.info(f"Result was: {result['Output']!s}\n")
         slog.info(
             StructuredMessage(
-                "Create Local Snapshots",
+                "Create Remote Snapshots",
                 command=f"{result.get('Command')}",
                 return_code=f"{result.get('Return Code')}",
                 reult=f"{result['Output']!s}",
