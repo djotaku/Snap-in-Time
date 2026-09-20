@@ -25,18 +25,11 @@ class StructuredMessage:
     def __str__(self):
         return f'{self.message} >>> {json.dumps(self.kwargs)}'
 
-# Use python default handler
-LOG_HANDLERS = None
-if (
-    # Check if program running as systemd service
-    check_journal_stream() or
-    # Check if journald socket is available
-    JournaldLogHandler.SOCKET_PATH.exists()
-):
-    LOG_HANDLERS = [JournaldLogHandler()]
-
 slog = logging.getLogger("snapintime")
 slog.setLevel(logging.DEBUG)
-slog.addHandler(JournaldLogHandler())
+if JournaldLogHandler.SOCKET_PATH.exists():
+    slog.addHandler(JournaldLogHandler())
+else:
+    slog.addHandler(console_handler) # if no journald, just make it another console log
 
 print(f"Using version {__version__}")
