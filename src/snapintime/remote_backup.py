@@ -3,9 +3,8 @@
 import os
 import subprocess
 
+from snapintime import StructuredMessage, log, slog
 from snapintime.utils import config  # type: ignore
-
-from . import log
 
 
 def get_remote_subvols(remote_location: str, remote_subvol_dir: str) -> list:
@@ -105,6 +104,14 @@ def main():  # pragma: no cover
     for result in results:
         log.info(f"\nRan {result.get('Command')} with a return code of {result.get('Return Code')}")
         log.info(f"Result was: {result['Output']!s}\n")
+        slog.info(
+            StructuredMessage(
+                "Create Local Snapshots",
+                command=f"{result.get('Command')}",
+                return_code=f"{result.get('Return Code')}",
+                reult=f"{result['Output']!s}",
+            )
+        )
 
 
 if __name__ == "__main__":  # pragma: no cover
