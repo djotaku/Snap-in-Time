@@ -7,8 +7,7 @@ from datetime import datetime, timedelta
 
 import snapintime.utils.date  # type: ignore
 from snapintime.utils import config  # type: ignore
-
-from . import log
+from snapintime import StructuredMessage, log, slog
 
 SNAPSHOT_RE = re.compile(r"^\d{4}-\d{2}-\d{2}-\d{4}$")
 SNAPSHOT_FORMAT = "%Y-%m-%d-%H%M"
@@ -166,6 +165,7 @@ def print_output(list_of_lists: list):  # pragma: no cover
     for directory in list_of_lists:
         for result in directory:
             log.info(result)
+            slog.info(StructuredMessage("Culling", result=result)) # may need to tweak things here to get something useful
 
 
 def main():  # pragma: no cover

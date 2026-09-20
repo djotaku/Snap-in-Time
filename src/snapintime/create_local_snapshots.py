@@ -3,7 +3,7 @@
 import subprocess
 from datetime import datetime
 
-from snapintime import log, slog, StructuredMessage
+from snapintime import StructuredMessage, log, slog
 from snapintime.utils import config  # type: ignore
 
 
