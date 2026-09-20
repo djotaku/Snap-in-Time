@@ -1,5 +1,5 @@
 __author__ = "Eric Mesa"
-__version__ = "3.1.2"
+__version__ = "3.1.3"
 __license__ = "GNU GPL v3.1"
 __copyright__: str = "(c) 2014 - 2026 Eric Mesa"
 __email__: str = "ericsbinaryworld at gmail dot com"
@@ -25,11 +25,12 @@ class StructuredMessage:
     def __str__(self):
         return f'{self.message} >>> {json.dumps(self.kwargs)}'
 
-slog = logging.getLogger("snapintime")
+slog = logging.getLogger("snapintime.journal")
 slog.setLevel(logging.DEBUG)
+slog.propagate = False
 if JournaldLogHandler.SOCKET_PATH.exists():
     slog.addHandler(JournaldLogHandler())
 else:
-    slog.addHandler(console_handler) # if no journald, just make it another console log
+    slog.addHandler(logging.NullHandler())
 
 print(f"Using version {__version__}")
