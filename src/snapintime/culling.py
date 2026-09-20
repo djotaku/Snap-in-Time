@@ -6,8 +6,8 @@ import subprocess
 from datetime import datetime, timedelta
 
 import snapintime.utils.date  # type: ignore
-from snapintime.utils import config  # type: ignore
 from snapintime import StructuredMessage, log, slog
+from snapintime.utils import config  # type: ignore
 
 SNAPSHOT_RE = re.compile(r"^\d{4}-\d{2}-\d{2}-\d{4}$")
 SNAPSHOT_FORMAT = "%Y-%m-%d-%H%M"

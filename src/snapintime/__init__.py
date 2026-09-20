@@ -7,7 +7,7 @@ __email__: str = "ericsbinaryworld at gmail dot com"
 import json
 import logging
 
-from logging_journald import JournaldLogHandler, check_journal_stream
+from logging_journald import JournaldLogHandler
 from rich.logging import RichHandler
 
 log = logging.getLogger("snapintime")

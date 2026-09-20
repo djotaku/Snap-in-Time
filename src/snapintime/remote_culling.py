@@ -1,6 +1,6 @@
 from snapintime.utils import config  # type: ignore
 
-from . import culling, StructuredMessage, log, slog
+from . import StructuredMessage, culling, log, slog
 
 
 def main():

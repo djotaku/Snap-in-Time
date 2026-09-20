@@ -3,9 +3,8 @@
 import os
 import subprocess
 
-from snapintime.utils import config  # type: ignore
-
 from snapintime import StructuredMessage, log, slog
+from snapintime.utils import config  # type: ignore
 
 
 def get_remote_subvols(remote_location: str, remote_subvol_dir: str) -> list:
