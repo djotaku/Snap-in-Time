@@ -24,3 +24,5 @@ Homepage = "https://github.com/djotaku/Snap-in-Time"
 requires = ["uv_build>=0.12.17,<0.13"]
 build-backend = "uv_build"
 
+[tool.ruff.lint]
+ignore = ["DTZ001", "DTZ005", "DTZ007"]
