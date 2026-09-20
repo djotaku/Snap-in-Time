@@ -2,7 +2,7 @@
 
 import json
 
-import xdgenvpy  # type: ignore
+from xdgenvpy import XDGPedanticPackage  # type: ignore
 
 
 def import_config() -> dict:
@@ -11,7 +11,7 @@ def import_config() -> dict:
     :returns: A dictionary containing configs
     :raises: FileNotFoundError
     """
-    xdg = xdgenvpy.XDGPedanticPackage('snapintime')
+    xdg = XDGPedanticPackage('snapintime')
     try:
         with open(f"{xdg.XDG_CONFIG_HOME}/config.json") as file:
             config = json.load(file)
