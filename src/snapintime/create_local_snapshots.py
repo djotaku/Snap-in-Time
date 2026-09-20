@@ -4,7 +4,7 @@ import subprocess
 from datetime import datetime
 
 from snapintime import log
-from snapintime.utils import config as config  # type: ignore
+from snapintime.utils import config  # type: ignore
 
 
 def get_date_time() -> str:
@@ -60,7 +60,7 @@ def main():  # pragma: no cover
     results = iterate_configs(date_time_for_backup, our_config)
     for result in results:
         log.info(f"Ran: {result.get('Command')}. Command had a return code of {result.get('Return Code')}")
-        log.info(f"Result was: {str(result['Output'])}")
+        log.info(f"Result was: {result['Output']!s}")
 
 
 if __name__ == "__main__":  # pragma: no cover
