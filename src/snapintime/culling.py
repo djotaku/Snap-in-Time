@@ -4,13 +4,11 @@ import os
 import re
 import subprocess
 from datetime import datetime, timedelta
-from typing import Optional
 
 import snapintime.utils.date  # type: ignore
 from snapintime.utils import config as config  # type: ignore
 
 from . import log
-
 
 SNAPSHOT_RE = re.compile(r"^\d{4}-\d{2}-\d{2}-\d{4}$")
 SNAPSHOT_FORMAT = "%Y-%m-%d-%H%M"
