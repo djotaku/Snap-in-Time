@@ -6,7 +6,7 @@ import subprocess
 from datetime import datetime, timedelta
 
 import snapintime.utils.date  # type: ignore
-from snapintime.utils import config as config  # type: ignore
+from snapintime.utils import config  # type: ignore
 
 from . import log
 
