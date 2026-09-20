@@ -46,9 +46,9 @@ wheels = [
 ]
 
 [[package]]
-name = "snap-in-time"
-version = "0.1.0"
-source = { virtual = "." }
+name = "snapintime"
+version = "3.0.0"
+source = { editable = "." }
 dependencies = [
     { name = "rich" },
     { name = "xdgenvpy" },
