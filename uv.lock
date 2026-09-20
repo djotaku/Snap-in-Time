@@ -34,15 +34,15 @@ wheels = [
 
 [[package]]
 name = "rich"
-version = "13.7.1"
+version = "15.0.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "markdown-it-py" },
     { name = "pygments" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b3/01/c954e134dc440ab5f96952fe52b4fdc64225530320a910473c1fe270d9aa/rich-13.7.1.tar.gz", hash = "sha256:9be308cb1fe2f1f57d67ce99e95af38a1e2bc71ad9813b0e247cf7ffbcc3a432", size = 221248, upload-time = "2024-02-28T14:51:19.472Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/c0/8f/0722ca900cc807c13a6a0c696dacf35430f72e0ec571c4275d2371fca3e9/rich-15.0.0.tar.gz", hash = "sha256:edd07a4824c6b40189fb7ac9bc4c52536e9780fbbfbddf6f1e2502c31b068c36", size = 230680, upload-time = "2026-04-12T08:24:00.75Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/87/67/a37f6214d0e9fe57f6ae54b2956d550ca8365857f42a1ce0392bb21d9410/rich-13.7.1-py3-none-any.whl", hash = "sha256:4edbae314f59eb482f54e9e30bf00d33350aaa94f4bfcd4e9e3110e64d0d7222", size = 240681, upload-time = "2024-02-28T14:51:14.353Z" },
+    { url = "https://files.pythonhosted.org/packages/82/3b/64d4899d73f91ba49a8c18a8ff3f0ea8f1c1d75481760df8c68ef5235bf5/rich-15.0.0-py3-none-any.whl", hash = "sha256:33bd4ef74232fb73fe9279a257718407f169c09b78a87ad3d296f548e27de0bb", size = 310654, upload-time = "2026-04-12T08:24:02.83Z" },
 ]
 
 [[package]]
@@ -56,15 +56,15 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "rich", specifier = "==13.7.1" },
-    { name = "xdgenvpy", specifier = "==2.4.0" },
+    { name = "rich", specifier = "==15.0.0" },
+    { name = "xdgenvpy", specifier = "==3.0.0" },
 ]
 
 [[package]]
 name = "xdgenvpy"
-version = "2.4.0"
+version = "3.0.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/24/bd/cd64dd3a4a55cfbe2dcfafc6ed12afd6ceebd9e8c8715072279d33f6a1e2/xdgenvpy-2.4.0.tar.gz", hash = "sha256:ff3f0d36a7ae77b25a47c9e37daa66e009acb7a14dbec257331a1254e1e690d3", size = 21387, upload-time = "2024-07-21T01:38:43.669Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/1e/3d/700b94ffa97b3669b83dbc38833191433a560a982d831a2801873ca38065/xdgenvpy-3.0.0.tar.gz", hash = "sha256:c03ff979fa8002618d1e4f777bd62797d629e0dc599cf23d4dc6f536c64bc340", size = 21286, upload-time = "2024-09-15T21:46:06.376Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f1/7e/1d55a5749fbf7d1ac6411f3028128b974a3e6bb770d365a2518ecee8ce7e/xdgenvpy-2.4.0-py3-none-any.whl", hash = "sha256:4c4e427a753e8ecb0e336a7cd7eacd55f91a5fc8fd1fa42a957706fccf2b9949", size = 17100, upload-time = "2024-07-21T01:38:42.209Z" },
+    { url = "https://files.pythonhosted.org/packages/68/dd/ecf934e832eb4eff314aaefb0d2dc29f1de76918f68670c63179f220db82/xdgenvpy-3.0.0-py3-none-any.whl", hash = "sha256:2d4991f380cab1288e62a47e19fc7bc1490ea82b4e796989695ceb2c5f702f51", size = 16918, upload-time = "2024-09-15T21:46:04.89Z" },
 ]

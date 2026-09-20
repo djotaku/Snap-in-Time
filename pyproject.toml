@@ -13,8 +13,8 @@ classifiers = [
     "Programming Language :: Python :: 3",
 ]
 dependencies = [
-    "xdgenvpy==2.4.0",
-    "rich==13.7.1",
+    "xdgenvpy==3.0.0",
+    "rich==15.0.0",
 ]
 
 [project.urls]
