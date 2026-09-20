@@ -3,7 +3,7 @@
 import subprocess
 from datetime import datetime
 
-from snapintime import log
+from snapintime import log, slog, StructuredMessage
 from snapintime.utils import config  # type: ignore
 
 
@@ -61,6 +61,9 @@ def main():  # pragma: no cover
     for result in results:
         log.info(f"Ran: {result.get('Command')}. Command had a return code of {result.get('Return Code')}")
         log.info(f"Result was: {result['Output']!s}")
+        slog.info(StructuredMessage("Create Local Snapshots", command=f"{result.get('Command')}",
+                                    return_code=f"{result.get('Return Code')}",
+                                    reult=f"{result['Output']!s}"))
 
 
 if __name__ == "__main__":  # pragma: no cover
