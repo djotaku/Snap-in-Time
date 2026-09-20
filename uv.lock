@@ -125,7 +125,7 @@ dev = [
 requires-dist = [
     { name = "logging-journald", specifier = ">=0.6.12" },
     { name = "rich", specifier = "==15.0.0" },
-    { name = "xdgenvpy", specifier = "==3.0.0" },
+    { name = "xdgenvpy", specifier = "==2.4.0" },
 ]
 
 [package.metadata.requires-dev]
@@ -133,9 +133,9 @@ dev = [{ name = "pytest" }]
 
 [[package]]
 name = "xdgenvpy"
-version = "3.0.0"
+version = "2.4.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/1e/3d/700b94ffa97b3669b83dbc38833191433a560a982d831a2801873ca38065/xdgenvpy-3.0.0.tar.gz", hash = "sha256:c03ff979fa8002618d1e4f777bd62797d629e0dc599cf23d4dc6f536c64bc340", size = 21286, upload-time = "2024-09-15T21:46:06.376Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/24/bd/cd64dd3a4a55cfbe2dcfafc6ed12afd6ceebd9e8c8715072279d33f6a1e2/xdgenvpy-2.4.0.tar.gz", hash = "sha256:ff3f0d36a7ae77b25a47c9e37daa66e009acb7a14dbec257331a1254e1e690d3", size = 21387, upload-time = "2024-07-21T01:38:43.669Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/68/dd/ecf934e832eb4eff314aaefb0d2dc29f1de76918f68670c63179f220db82/xdgenvpy-3.0.0-py3-none-any.whl", hash = "sha256:2d4991f380cab1288e62a47e19fc7bc1490ea82b4e796989695ceb2c5f702f51", size = 16918, upload-time = "2024-09-15T21:46:04.89Z" },
+    { url = "https://files.pythonhosted.org/packages/f1/7e/1d55a5749fbf7d1ac6411f3028128b974a3e6bb770d365a2518ecee8ce7e/xdgenvpy-2.4.0-py3-none-any.whl", hash = "sha256:4c4e427a753e8ecb0e336a7cd7eacd55f91a5fc8fd1fa42a957706fccf2b9949", size = 17100, upload-time = "2024-07-21T01:38:42.209Z" },
 ]
