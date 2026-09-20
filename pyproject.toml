@@ -1,6 +1,6 @@
 [project]
 name = "snapintime"
-version = "3.0.0"  # uv_build requires a static string - use uv version --bump
+version = "3.1.0"  # uv_build requires a static string - use uv version --bump
 description = "A program for creating, culling, and remote backup of btrfs snapshots"
 readme = "pypi.rst"
 authors = [
