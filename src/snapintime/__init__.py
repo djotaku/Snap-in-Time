@@ -29,7 +29,7 @@ slog = logging.getLogger("snapintime.journal")
 slog.setLevel(logging.DEBUG)
 slog.propagate = False
 if JournaldLogHandler.SOCKET_PATH.exists():
-    slog.addHandler(JournaldLogHandler())
+    slog.addHandler(JournaldLogHandler(identifier="snapintime"))
 else:
     slog.addHandler(logging.NullHandler())
 
