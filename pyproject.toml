@@ -1,0 +1,32 @@
+[project]
+name = "snapintime"
+version = "3.0.0"  # uv_build requires a static string - use uv version --bump
+description = "A program for creating, culling, and remote backup of btrfs snapshots"
+readme = "pypi.rst"
+authors = [
+    { name = "Eric Mesa", email = "eric@ericmesa.com" }
+]
+keywords = ["btrfs"]
+classifiers = [
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "xdgenvpy==3.0.0",
+    "rich==15.0.0",
+]
+requires-python = ">=3.14"
+
+[dependency-groups]
+dev = ["pytest"]
+
+[project.urls]
+Homepage = "https://github.com/djotaku/Snap-in-Time"
+
+[build-system]
+requires = ["uv_build>=0.12.17,<0.13"]
+build-backend = "uv_build"
+
+[tool.ruff.lint]
+ignore = ["DTZ001", "DTZ005", "DTZ007"]
