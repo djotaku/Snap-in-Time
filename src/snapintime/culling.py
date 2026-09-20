@@ -59,10 +59,10 @@ def btrfs_del(directory: str, subvols: list, remote: bool = False, remote_locati
                 log.debug(f'{command=}')
                 raw_result = subprocess.run(command, capture_output=True, shell=True, check=True, text=True)
                 return_text = f"Ran {raw_result.args} with a return code of {raw_result.returncode}.\n" \
-                              f"Result was {str(raw_result.stdout)}"
+                              f"Result was {raw_result.stdout!s}"
                 return_list.append(return_text)
             except subprocess.SubprocessError as e:
-                error_text = f"Ran {e.args[1]} with a return code of {e.returncode}.\nResult was {str(e.stderr)}"  # type: ignore
+                error_text = f"Ran {e.args[1]} with a return code of {e.returncode}.\nResult was {e.stderr!s}"  # type: ignore
                 return_list.append(error_text)
     else:
         return_list = [f"There was either only one or no subvolumes in {directory} at that date"]
@@ -87,7 +87,7 @@ def _closest_snapshot(snapshots: list[tuple[datetime, str]], target: datetime) -
     return min(snapshots, key=lambda snapshot: (abs(snapshot[0] - target), -snapshot[0].timestamp()))[1]
 
 
-def generate_retention_cull_list(snapshot_names: list, now: Optional[datetime] = None) -> list:
+def generate_retention_cull_list(snapshot_names: list, now: datetime | None = None) -> list:
     """Return snapshots that fall outside the progressive retention policy.
 
     The policy retains all snapshots for two days, four representative snapshots
@@ -141,7 +141,7 @@ def generate_retention_cull_list(snapshot_names: list, now: Optional[datetime] =
             if snapshot_name in parsed_names and snapshot_name not in retained]
 
 
-def cull_snapshots(configuration: dict, remote: bool = False, now: Optional[datetime] = None) -> list:
+def cull_snapshots(configuration: dict, remote: bool = False, now: datetime | None = None) -> list:
     """Cull all configured snapshot directories using the retention policy."""
     location = "remote_subvol_dir" if remote else "backuplocation"
     return_list = []
