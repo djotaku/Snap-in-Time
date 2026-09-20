@@ -1,4 +1,4 @@
-from snapintime.utils import config as config  # type: ignore
+from snapintime.utils import config  # type: ignore
 
 from . import culling, log
 

@@ -3,7 +3,7 @@
 import os
 import subprocess
 
-from snapintime.utils import config as config  # type: ignore
+from snapintime.utils import config  # type: ignore
 
 from . import log
 
@@ -104,7 +104,7 @@ def main():  # pragma: no cover
     results = iterate_over_subvolumes(our_config)
     for result in results:
         log.info(f"\nRan {result.get('Command')} with a return code of {result.get('Return Code')}")
-        log.info(f"Result was: {str(result['Output'])}\n")
+        log.info(f"Result was: {result['Output']!s}\n")
 
 
 if __name__ == "__main__":  # pragma: no cover
