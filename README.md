@@ -13,7 +13,15 @@ Documentation: https://snap-in-time.readthedocs.io/en/latest/
 As of [release v3.1.3])(https://github.com/djotaku/Snap-in-Time/releases/tag/v3.1.3) if you are running on a system with journald, you can type:
 
 ```bash
-journalctl -t snapintime
+journalctl -t snapintime 
+
+# this can get a little overwhelming so you limit by time
+
+journalctl -t snapintime --since today
+
+# or be more specific
+
+journalctl -t snapintime --since "2026-09-19 08:00:00" --until "2026-09-21 10:00:00"
 
 ```
 to get a structured log of the program's output. 
