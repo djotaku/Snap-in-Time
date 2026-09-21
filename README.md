@@ -28,7 +28,7 @@ I have eliminated the file-based logging in favor of journald logging.
 
 ## AI Usage
 
-From the projects creation in 2014 through to 2024 no AI was used in the production of this codebase.
+From the project's creation in 2014 through to 2024 no AI was used in the development of this codebase.
 
 - For [Release v3.0.0](https://github.com/djotaku/Snap-in-Time/releases/tag/v3.0.0) I used AI for the first time in this codebase to fix a long-standing bug in the culling algorithm that was not working correctly. 
 - For [Release v3.1.3])(https://github.com/djotaku/Snap-in-Time/releases/tag/v3.1.3) to help me figure out why I was printing the same output to both logs.
