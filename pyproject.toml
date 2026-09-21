@@ -19,11 +19,15 @@ dependencies = [
 ]
 requires-python = ">=3.14"
 
-[dependency-groups]
-dev = ["pytest"]
-
 [project.urls]
 Homepage = "https://github.com/djotaku/Snap-in-Time"
+
+[project.scripts]
+snap_in_time_snapshots = "snapintime.create_local_snapshots:main"
+snap_in_time_remote_backup = "snapintime.remote_backup:main" # do we do this pattern? Or adopt argparse?
+
+[dependency-groups]
+dev = ["pytest"]
 
 [build-system]
 requires = ["uv_build>=0.12.17,<0.13"]
